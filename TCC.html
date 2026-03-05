@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Plataforma interativa de preparação para redação do ENEM 2026. Pratique identificação de erros, aprenda com feedback detalhado e alcance a nota 1000!">
+    <meta name="keywords" content="ENEM, redação, preparação, nota 1000, gramática, português, vestibular">
+    <meta name="author" content="Plataforma ENEM 2026">
+    <title>🌾 Redação ENEM 2026 - Sua Jornada para a Nota 1000</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="TCC.CSS">
+</head>
+<body>
+    <header class="main-navbar" id="main-navbar" role="banner">
+        <div class="navbar-inner">
+            <button class="navbar-menu-btn" id="btn-open-menu" onclick="abrirMenu()" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="nav-drawer">
+                <span class="menu-icon-bars" aria-hidden="true">
+                    <span class="menu-icon-bar"></span>
+                    <span class="menu-icon-bar"></span>
+                </span>
+                <span class="menu-label">Menu</span>
+            </button>
+            <div></div>
+            <div class="navbar-actions">
+                <button class="navbar-icon-btn" id="btn-search-toggle" onclick="toggleBusca()" aria-label="Buscar" title="Buscar na plataforma">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                </button>
+                <button class="navbar-cta-btn" onclick="ativarAba('pratica')" aria-label="Praticar agora">
+                    🌾 Praticar Agora
+                </button>
+            </div>
+
+        </div>
+        <div class="navbar-search-bar" id="navbar-search-bar" aria-hidden="true">
+            <div class="search-bar-inner">
+                <svg class="search-bar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="m21 21-4.35-4.35"/>
+                </svg>
+                <input type="search" id="search-input" class="search-bar-input" placeholder="Buscar competência, tema, dica..." autocomplete="off" aria-label="Campo de busca"/>
+                <button class="search-bar-close" onclick="toggleBusca()" aria-label="Fechar busca">✕</button>
+            </div>
+            <div class="search-results" id="search-results" role="list" aria-label="Resultados da busca"></div>
+        </div>
+    </header>
+    <!-- MENU DRAWER (lateral)                 -->
+    <div class="nav-drawer-overlay" id="nav-drawer-overlay" onclick="fecharMenu()" aria-hidden="true"></div>
+
+    <nav class="nav-drawer" id="nav-drawer" role="dialog" aria-label="Menu de navegação" aria-modal="true" aria-hidden="true">
+        <div class="nav-drawer-inner">
+
+            <button class="nav-drawer-close" onclick="fecharMenu()" aria-label="Fechar menu">
+                <span class="close-x">✕</span>
+                <span class="close-label">Fechar</span>
+            </button>
+
+            <ul class="nav-drawer-list" role="tablist">
+                <li>
+                    <button class="nav-drawer-item active" data-tab="inicio" role="tab" aria-selected="true" onclick="ativarAba('inicio'); fecharMenu()">
+                        Início
+                    </button>
+                </li>
+                <li>
+                    <button class="nav-drawer-item" data-tab="competencias" role="tab" aria-selected="false" onclick="ativarAba('competencias'); fecharMenu()">
+                        Competências
+                    </button>
+                </li>
+                <li>
+                    <button class="nav-drawer-item" data-tab="dicas" role="tab" aria-selected="false" onclick="ativarAba('dicas'); fecharMenu()">
+                        Dicas &amp; Conectivos
+                    </button>
+                </li>
+                <li>
+                    <button class="nav-drawer-item" data-tab="temas" role="tab" aria-selected="false" onclick="ativarAba('temas'); fecharMenu()">
+                        Temas
+                    </button>
+                </li>
+                <li class="nav-drawer-divider" aria-hidden="true"></li>
+                <li>
+                    <button class="nav-drawer-item" data-tab="acessibilidade" role="tab" aria-selected="false" onclick="ativarAba('acessibilidade'); fecharMenu()">
+                        Acessibilidade
+                    </button>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+    <main class="container" role="main">
+        <div id="panel-inicio" class="tab-panel active" role="tabpanel" aria-labelledby="tab-inicio">
+
+            <header class="page-header">
+                <h1 class="main-title fade-in">
+                    <span class="title-icon">✨</span>
+                    Plataforma ENEM 2026
+                    <span class="title-subtitle">Sua Jornada para a Redação Nota 1000</span>
+                </h1>
+
+                <div class="status-gamificacao fade-in" id="status-gamificacao">
+                    <div class="nivel-card">
+                        <div class="nivel-icone" id="nivel-icone">🌱</div>
+                        <div class="nivel-info">
+                            <span class="nivel-label">Nível</span>
+                            <span class="nivel-numero" id="nivel-numero">1</span>
+                            <span class="nivel-titulo" id="nivel-titulo">Aprendiz</span>
+                        </div>
+                    </div>
+
+                    <div class="xp-card">
+                        <div class="xp-info">
+                            <span class="xp-label">Experiência</span>
+                            <div class="xp-numeros">
+                                <span id="xp-atual">0</span>
+                                <span class="xp-separador">/</span>
+                                <span id="xp-total">100</span>
+                                <span class="xp-label-small">XP</span>
+                            </div>
+                        </div>
+                        <div class="xp-barra-container">
+                            <div class="xp-barra" id="xp-barra"></div>
+                        </div>
+                    </div>
+
+                    <div class="stats-card">
+                        <div class="stat-item">
+                            <span class="stat-icon">🎯</span>
+                            <span class="stat-label">Redações</span>
+                            <span class="stat-value" id="total-redacoes">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-icon">⭐</span>
+                            <span class="stat-label">Acertos</span>
+                            <span class="stat-value" id="total-acertos">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-icon">🔥</span>
+                            <span class="stat-label">Sequência</span>
+                            <span class="stat-value" id="sequencia-atual">0</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section class="section-intro fade-in">
+                <div class="card card-destaque">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="icon">📝</span>
+                            A Importância da Redação no ENEM
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-lead">
+                            A redação do ENEM é uma das provas mais importantes e decisivas do exame!
+                            Ela pode representar até <strong>20% da sua nota final</strong> em cursos concorridos
+                            e é fator de desempate em diversas situações.
+                        </p>
+                        <p>
+                            Dominar a norma culta da língua portuguesa, construir argumentos sólidos com repertório
+                            sociocultural, garantir a coesão textual e elaborar uma proposta de intervenção completa
+                            são habilidades essenciais para conquistar a tão sonhada <strong class="highlight">nota 1000</strong>! 🌱
+                        </p>
+                        <p>
+                            <strong>Por que treinar com nossa plataforma?</strong> Aqui você pratica identificação
+                            de erros em textos reais, desenvolve olhar crítico apurado e aprende com feedback
+                            detalhado e personalizado!
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="alerts-section fade-in" role="region" aria-label="Avisos importantes">
+                <div class="alert alert-success">
+                    <span class="alert-icon">✅</span>
+                    <div class="alert-content">
+                        <strong>Sucesso!</strong> A prática diária é o segredo para dominar a redação do ENEM!
+                    </div>
+                </div>
+                <div class="alert alert-warning">
+                    <span class="alert-icon">⚠️</span>
+                    <div class="alert-content">
+                        <strong>Atenção!</strong> Lembre-se: cada competência vale 200 pontos. Treine todas elas!
+                    </div>
+                </div>
+                <div class="alert alert-info">
+                    <span class="alert-icon">💡</span>
+                    <div class="alert-content">
+                        <strong>Dica:</strong> Ler redações nota 1000 e identificar erros em textos ajuda muito no aprendizado!
+                    </div>
+                </div>
+            </section>
+
+            <section class="stats-enem-section fade-in">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="icon">📈</span>
+                            Estatísticas Importantes do ENEM
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="stats-grid">
+                            <div class="stat-box">
+                                <div class="stat-number highlight-primary">1.6%</div>
+                                <p class="stat-description">dos participantes tiram nota 1000 na redação</p>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number highlight-gold">200</div>
+                                <p class="stat-description">pontos valem cada competência da redação</p>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number highlight-green">30</div>
+                                <p class="stat-description">linhas é o tamanho ideal da sua redação</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="tags-section fade-in">
+                <div class="card card-center">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="icon">🏆</span>
+                            Competências Trabalhadas nesta Plataforma
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="tags-cloud">
+                            <span class="tag tag-success">Gramática</span>
+                            <span class="tag tag-primary">Ortografia</span>
+                            <span class="tag tag-primary">Acentuação</span>
+                            <span class="tag tag-primary">Pontuação</span>
+                            <span class="tag tag-warning">Análise Crítica</span>
+                            <span class="tag tag-info">ENEM 2026</span>
+                            <span class="tag tag-success">Concordância</span>
+                            <span class="tag tag-warning">Regência</span>
+                            <span class="tag tag-primary">Crase</span>
+                            <span class="tag tag-success">Coesão Textual</span>
+                            <span class="tag tag-warning">Argumentação</span>
+                            <span class="tag tag-info">Repertório</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <blockquote class="quote-inspiradora fade-in">
+                <p class="quote-text">
+                    "Continue nessa jornada contínua de aprendizado, prática e melhora."
+                </p>
+                <footer class="quote-footer">
+                    <span class="quote-icon">✨</span>
+                    Cada erro identificado é um passo mais próximo da nota 1000!
+                </footer>
+            </blockquote>
+
+        </div>
+        <div id="panel-competencias" class="tab-panel" role="tabpanel" aria-labelledby="tab-competencias">
+
+            <section class="competencias-section fade-in">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="icon">🎯</span>
+                            As 5 Competências da Redação ENEM
+                        </h2>
+                        <p class="card-subtitle">Cada competência vale 200 pontos - Juntas somam 1000 pontos!</p>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="competencia-item">
+                            <div class="competencia-header">
+                                <span class="competencia-numero">C1</span>
+                                <h3 class="competencia-titulo">Domínio da Norma-Padrão da Língua Portuguesa</h3>
+                            </div>
+                            <p class="competencia-descricao">
+                                Avalia o domínio da língua portuguesa formal: ortografia, acentuação, pontuação,
+                                concordância verbal e nominal, regência verbal e nominal, e ausência de marcas de oralidade.
+                            </p>
+                            <div class="competencia-exemplos">
+                                <strong>Exemplos de erros:</strong> "Haviam muitos problemas" (correto: Havia),
+                                "Os alunos que eu conversei" (falta preposição: com quem)
+                            </div>
+                        </div>
+
+                        <div class="competencia-item">
+                            <div class="competencia-header">
+                                <span class="competencia-numero">C2</span>
+                                <h3 class="competencia-titulo">Compreensão da Proposta de Redação</h3>
+                            </div>
+                            <p class="competencia-descricao">
+                                Verifica se você compreendeu o tema proposto e desenvolveu o texto seguindo
+                                a estrutura dissertativo-argumentativa, utilizando os textos motivadores de forma
+                                adequada sem simplesmente copiá-los.
+                            </p>
+                            <div class="competencia-exemplos">
+                                <strong>Atenção:</strong> Fuja do tema = nota zero. Sempre desenvolva o tema central
+                                sem tangenciar ou mudar de assunto.
+                            </div>
+                        </div>
+
+                        <div class="competencia-item">
+                            <div class="competencia-header">
+                                <span class="competencia-numero">C3</span>
+                                <h3 class="competencia-titulo">Seleção e Organização de Argumentos</h3>
+                            </div>
+                            <p class="competencia-descricao">
+                                Analisa sua capacidade de selecionar, relacionar, organizar e interpretar informações,
+                                fatos, opiniões e argumentos em defesa de um ponto de vista, utilizando repertório
+                                sociocultural produtivo e legitimado.
+                            </p>
+                            <div class="competencia-exemplos">
+                                <strong>Repertório legitimado:</strong> Dados estatísticos, citações de pensadores,
+                                obras artísticas, acontecimentos históricos, estudos científicos.
+                            </div>
+                        </div>
+
+                        <div class="competencia-item">
+                            <div class="competencia-header">
+                                <span class="competencia-numero">C4</span>
+                                <h3 class="competencia-titulo">Coesão Textual</h3>
+                            </div>
+                            <p class="competencia-descricao">
+                                Avalia o uso de mecanismos linguísticos (conectivos, pronomes, sinônimos, etc.)
+                                que garantem a articulação entre as partes do texto, promovendo a progressão
+                                e o encadeamento das ideias.
+                            </p>
+                            <div class="competencia-exemplos">
+                                <strong>Conectivos essenciais:</strong> Ademais, outrossim, além disso (adição);
+                                entretanto, todavia, no entanto (oposição); portanto, logo, assim (conclusão).
+                            </div>
+                        </div>
+
+                        <div class="competencia-item">
+                            <div class="competencia-header">
+                                <span class="competencia-numero">C5</span>
+                                <h3 class="competencia-titulo">Proposta de Intervenção</h3>
+                            </div>
+                            <p class="competencia-descricao">
+                                Verifica se você elaborou uma proposta de solução para o problema abordado,
+                                respeitando os direitos humanos e apresentando os 5 elementos completos.
+                            </p>
+                            <div class="competencia-exemplos">
+                                <strong>5 Elementos obrigatórios:</strong> Ação (o quê fazer), Agente (quem fará),
+                                Modo/Meio (como fazer), Efeito/Finalidade (para quê), Detalhamento (aprofundamento de um elemento).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+        <div id="panel-dicas" class="tab-panel" role="tabpanel" aria-labelledby="tab-dicas">
+
+            <section class="dicas-section fade-in">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="icon">💡</span>
+                            Dicas de Ouro para a Redação Nota 1000
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <ol class="dicas-lista">
+                            <li><strong>Leia muito:</strong> Artigos de opinião, editoriais de jornais renomados, redações nota 1000 do ENEM de anos anteriores e textos de referência.</li>
+                            <li><strong>Pratique a estrutura:</strong> Introdução com contextualização e tese, dois desenvolvimentos com argumentação sólida, e conclusão com proposta de intervenção completa.</li>
+                            <li><strong>Use repertório legitimado:</strong> Cite dados estatísticos, pesquisas científicas, obras artísticas, acontecimentos históricos e pensadores renomados.</li>
+                            <li><strong>Conectivos são seus aliados:</strong> Use-os corretamente para dar coesão ao texto e garantir a progressão das ideias.</li>
+                            <li><strong>Proposta completa:</strong> Lembre-se dos 5 elementos obrigatórios: ação, agente, modo/meio, efeito/finalidade e detalhamento.</li>
+                            <li><strong>Revise sempre:</strong> Releia seu texto buscando erros gramaticais, problemas de coerência e coesão.</li>
+                            <li><strong>Respeite os direitos humanos:</strong> Propostas discriminatórias, preconceituosas ou que violem direitos fundamentais podem zerar sua nota!</li>
+                            <li><strong>Letra legível:</strong> Mesmo com excelente conteúdo, letra ilegível dificulta a correção e pode prejudicar sua nota.</li>
+                            <li><strong>Gerencie seu tempo:</strong> Reserve cerca de 60 minutos para a redação, distribuídos entre planejamento, escrita e revisão.</li>
+                            <li><strong>Evite clichês e senso comum:</strong> Fuja de frases feitas e argumentos superficiais. Busque profundidade e originalidade.</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <section class="conectivos-section fade-in">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="icon">🔗</span>
+                            Conectivos Essenciais para sua Redação
+                        </h2>
+                        <p class="card-subtitle">Organize suas ideias com coesão e fluidez</p>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="conectivos-categoria">
+                            <h3 class="categoria-titulo">
+                                <span class="categoria-icon">➕</span>
+                                Para Adicionar Ideias
+                            </h3>
+                            <div class="conectivos-tags">
+                                <span class="tag tag-primary">Além disso</span>
+                                <span class="tag tag-primary">Ademais</span>
+                                <span class="tag tag-primary">Outrossim</span>
+                                <span class="tag tag-primary">Não só... mas também</span>
+                                <span class="tag tag-primary">Igualmente</span>
+                                <span class="tag tag-primary">Do mesmo modo</span>
+                                <span class="tag tag-primary">Similarmente</span>
+                            </div>
+                        </div>
+
+                        <div class="conectivos-categoria">
+                            <h3 class="categoria-titulo">
+                                <span class="categoria-icon">↔️</span>
+                                Para Contrapor Ideias
+                            </h3>
+                            <div class="conectivos-tags">
+                                <span class="tag tag-warning">Entretanto</span>
+                                <span class="tag tag-warning">Todavia</span>
+                                <span class="tag tag-warning">No entanto</span>
+                                <span class="tag tag-warning">Por outro lado</span>
+                                <span class="tag tag-warning">Em contrapartida</span>
+                                <span class="tag tag-warning">Contudo</span>
+                                <span class="tag tag-warning">Conquanto</span>
+                            </div>
+                        </div>
+
+                        <div class="conectivos-categoria">
+                            <h3 class="categoria-titulo">
+                                <span class="categoria-icon">✅</span>
+                                Para Concluir
+                            </h3>
+                            <div class="conectivos-tags">
+                                <span class="tag tag-success">Portanto</span>
+                                <span class="tag tag-success">Assim</span>
+                                <span class="tag tag-success">Destarte</span>
+                                <span class="tag tag-success">Logo</span>
+                                <span class="tag tag-success">Por conseguinte</span>
+                                <span class="tag tag-success">Em suma</span>
+                                <span class="tag tag-success">Em síntese</span>
+                            </div>
+                        </div>
+
+                        <div class="conectivos-categoria">
+                            <h3 class="categoria-titulo">
+                                <span class="categoria-icon">📌</span>
+                                Para Exemplificar
+                            </h3>
+                            <div class="conectivos-tags">
+                                <span class="tag tag-info">Por exemplo</span>
+                                <span class="tag tag-info">Como</span>
+                                <span class="tag tag-info">Tal como</span>
+                                <span class="tag tag-info">A saber</span>
+                                <span class="tag tag-info">Nesse sentido</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+        <div id="panel-temas" class="tab-panel" role="tabpanel" aria-labelledby="tab-temas">
+
+            <section class="temas-section fade-in">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="icon">🎲</span>
+                            Temas Recorrentes no ENEM
+                        </h2>
+                        <p class="card-subtitle">Esteja preparado para os assuntos mais cobrados</p>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-intro">
+                            Conheça os temas que mais aparecem nas redações do ENEM e esteja preparado
+                            com repertório sociocultural e argumentos sólidos:
+                        </p>
+                        <div class="temas-grid">
+                            <div class="tema-card">
+                                <div class="tema-icon">📚</div>
+                                <h4>Educação e Tecnologia</h4>
+                                <p>Inclusão digital, EaD, metodologias ativas</p>
+                            </div>
+                            <div class="tema-card">
+                                <div class="tema-icon">🏥</div>
+                                <h4>Saúde Pública</h4>
+                                <p>SUS, acesso a tratamentos, prevenção</p>
+                            </div>
+                            <div class="tema-card">
+                                <div class="tema-icon">🌿</div>
+                                <h4>Meio Ambiente</h4>
+                                <p>Sustentabilidade, desmatamento, mudanças climáticas</p>
+                            </div>
+                            <div class="tema-card">
+                                <div class="tema-icon">🚌</div>
+                                <h4>Mobilidade Urbana</h4>
+                                <p>Transporte público, trânsito, acessibilidade</p>
+                            </div>
+                            <div class="tema-card">
+                                <div class="tema-icon">👥</div>
+                                <h4>Direitos Humanos</h4>
+                                <p>Igualdade, inclusão, combate à discriminação</p>
+                            </div>
+                            <div class="tema-card">
+                                <div class="tema-icon">⚖️</div>
+                                <h4>Desigualdade Social</h4>
+                                <p>Distribuição de renda, pobreza, oportunidades</p>
+                            </div>
+                            <div class="tema-card">
+                                <div class="tema-icon">🛡️</div>
+                                <h4>Violência e Segurança</h4>
+                                <p>Criminalidade, violência doméstica, segurança pública</p>
+                            </div>
+                            <div class="tema-card">
+                                <div class="tema-icon">🌐</div>
+                                <h4>Internet e Democracia</h4>
+                                <p>Fake news, redes sociais, privacidade digital</p>
+                            </div>
+                            <div class="tema-card">
+                                <div class="tema-icon">🎭</div>
+                                <h4>Cultura e Identidade</h4>
+                                <p>Diversidade cultural, patrimônio, valorização</p>
+                            </div>
+                            <div class="tema-card">
+                                <div class="tema-icon">🗳️</div>
+                                <h4>Cidadania e Participação</h4>
+                                <p>Democracia, engajamento político, movimentos sociais</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+        <div id="panel-pratica" class="tab-panel" role="tabpanel" aria-labelledby="tab-pratica">
+
+            <section class="pratica-section fade-in" id="area-pratica">
+                <div class="card card-pratica">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="icon">🎯</span>
+                            Área de Prática - Identifique os Erros!
+                        </h2>
+                        <p class="card-subtitle">Treine suas habilidades de análise textual</p>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="alert alert-info">
+                            <span class="alert-icon">ℹ️</span>
+                            <div class="alert-content">
+                                <strong>Como funciona:</strong>
+                                <ol class="instrucoes-lista">
+                                    <li>Digite seu nome e escolha um tema (ou deixe aleatório)</li>
+                                    <li>Clique em "Gerar Redação" para criar um texto com erros propositais</li>
+                                    <li>Clique nas palavras/trechos onde você identifica problemas</li>
+                                    <li>Ao finalizar, veja sua pontuação e aprenda com os erros!</li>
+                                </ol>
+                            </div>
+                        </div>
+                        <div class="pratica-config">
+                            <div class="form-group">
+                                <label for="nome-usuario" class="form-label">
+                                    <span class="label-icon">👤</span>
+                                    Seu Nome
+                                </label>
+                                <input type="text"
+                                       id="nome-usuario"
+                                       class="form-input"
+                                       placeholder="Digite seu nome para começar"
+                                       maxlength="50">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tema-select" class="form-label">
+                                    <span class="label-icon">📖</span>
+                                    Escolha um Tema (opcional)
+                                </label>
+                                <select id="tema-select" class="form-select">
+                                    <option value="aleatorio">🎲 Tema Aleatório</option>
+                                    <option value="educacao">📚 Educação e Tecnologia</option>
+                                    <option value="meio-ambiente">🌿 Meio Ambiente e Sustentabilidade</option>
+                                    <option value="saude-mental">🧠 Saúde Mental no Brasil</option>
+                                    <option value="desigualdade">⚖️ Desigualdade Social</option>
+                                    <option value="violencia">👥 Violência contra a Mulher</option>
+                                    <option value="internet">🌐 Democratização do Acesso à Internet</option>
+                                </select>
+                            </div>
+
+                            <div class="form-actions">
+                                <button id="btn-gerar-redacao"
+                                        class="btn btn-primary btn-large"
+                                        onclick="gerarRedacao()">
+                                    <span class="btn-icon">🌾</span>
+                                    <span class="btn-text">Gerar Redação para Análise</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="redacao-container" class="redacao-container hidden">
+                            <div class="redacao-header">
+                                <h3 id="titulo-redacao" class="redacao-titulo"></h3>
+                                <div class="redacao-meta">
+                                    <span class="meta-item">
+                                        <span class="meta-icon">📊</span>
+                                        <span>Dificuldade: <strong id="dificuldade-redacao"></strong></span>
+                                    </span>
+                                    <span class="meta-item">
+                                        <span class="meta-icon">🎯</span>
+                                        <span>Competências: <strong id="competencias-redacao"></strong></span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div id="texto-redacao" class="texto-redacao" role="region" aria-label="Texto da redação">
+                            </div>
+
+                            <div class="acoes-redacao">
+                                <button id="btn-finalizar" class="btn btn-success" onclick="finalizarAnalise()">
+                                    <span class="btn-icon">✅</span>
+                                    <span class="btn-text">Finalizar e Ver Resultado</span>
+                                </button>
+                                <button id="btn-reiniciar" class="btn btn-secondary" onclick="reiniciarPratica()">
+                                    <span class="btn-icon">🔄</span>
+                                    <span class="btn-text">Nova Redação</span>
+                                </button>
+                                <button id="btn-dica" class="btn btn-info" onclick="mostrarDica()">
+                                    <span class="btn-icon">💡</span>
+                                    <span class="btn-text">Mostrar Dica</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="resultado-container" class="resultado-container hidden">
+                            <div class="resultado-header">
+                                <h3 class="resultado-titulo">
+                                    <span class="icon">🎓</span>
+                                    Resultado da Sua Análise
+                                </h3>
+                            </div>
+
+                            <div id="resultado-pontuacao" class="resultado-pontuacao">
+                            </div>
+
+                            <div id="resultado-detalhes" class="resultado-detalhes">
+                            </div>
+
+                            <div class="resultado-acoes">
+                                <button class="btn btn-primary" onclick="reiniciarPratica()">
+                                    <span class="btn-icon">🔄</span>
+                                    <span class="btn-text">Praticar Novamente</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+        <div id="panel-acessibilidade" class="tab-panel" role="tabpanel" aria-labelledby="tab-acessibilidade">
+
+            <section class="acess-section fade-in">
+                <div class="card card-destaque">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="icon">♿</span>
+                            Painel de Acessibilidade
+                        </h2>
+                        <p class="card-subtitle">Personalize a plataforma para sua melhor experiência</p>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="acess-grupo">
+                            <div class="acess-grupo-header">
+                                <span class="acess-grupo-icon">🔤</span>
+                                <h3 class="acess-grupo-titulo">Tamanho da Fonte</h3>
+                            </div>
+                            <div class="acess-controles">
+                                <button class="acess-btn" id="btn-fonte-diminuir" onclick="alterarFonte(-1)" aria-label="Diminuir tamanho da fonte">
+                                    <span class="acess-btn-icon">A−</span>
+                                    <span class="acess-btn-label">Diminuir</span>
+                                </button>
+                                <div class="acess-valor-display" id="display-fonte" aria-live="polite" aria-label="Tamanho de fonte atual">100%</div>
+                                <button class="acess-btn acess-btn-destaque" id="btn-fonte-aumentar" onclick="alterarFonte(1)" aria-label="Aumentar tamanho da fonte">
+                                    <span class="acess-btn-icon">A+</span>
+                                    <span class="acess-btn-label">Aumentar</span>
+                                </button>
+                                <button class="acess-btn acess-btn-reset" onclick="resetarFonte()" aria-label="Restaurar tamanho padrão da fonte">
+                                    <span class="acess-btn-icon">↺</span>
+                                    <span class="acess-btn-label">Padrão</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="acess-divider"></div>
+                        <div class="acess-grupo">
+                            <div class="acess-grupo-header">
+                                <span class="acess-grupo-icon">🎨</span>
+                                <h3 class="acess-grupo-titulo">Esquema de Cores</h3>
+                            </div>
+                            <p class="acess-descricao">Escolha um tema visual adaptado às suas necessidades</p>
+                            <div class="acess-temas-grid">
+
+                                <button class="acess-tema-card acess-tema-ativo" id="tema-padrao" onclick="aplicarTema('padrao')" aria-pressed="true" aria-label="Tema padrão SAW">
+                                    <div class="acess-tema-preview tema-prev-padrao"></div>
+                                    <span class="acess-tema-nome">Padrão</span>
+                                    <span class="acess-tema-desc">Tema original sombrio</span>
+                                </button>
+
+                                <button class="acess-tema-card" id="tema-alto-contraste" onclick="aplicarTema('alto-contraste')" aria-pressed="false" aria-label="Alto contraste — texto amarelo em fundo preto">
+                                    <div class="acess-tema-preview tema-prev-contraste"></div>
+                                    <span class="acess-tema-nome">Alto Contraste</span>
+                                    <span class="acess-tema-desc">Amarelo sobre preto</span>
+                                </button>
+
+                                <button class="acess-tema-card" id="tema-alto-contraste-simples" onclick="aplicarTema('alto-contraste-simples')" aria-pressed="false" aria-label="Alto Contraste Simples — interface limpa com contraste elevado para melhor legibilidade">
+                                    <div class="acess-tema-preview tema-prev-contraste-simples"></div>
+                                    <span class="acess-tema-nome">Alto Contraste Simples</span>
+                                    <span class="acess-tema-desc">Interface com contraste elevado para melhor legibilidade.</span>
+                                </button>
+
+                                <button class="acess-tema-card" id="tema-sepia" onclick="aplicarTema('sepia')" aria-pressed="false" aria-label="Tema sépia — tons quentes de papel envelhecido">
+                                    <div class="acess-tema-preview tema-prev-sepia"></div>
+                                    <span class="acess-tema-nome">Sépia</span>
+                                    <span class="acess-tema-desc">Tons quentes de papel</span>
+                                </button>
+
+                                <button class="acess-tema-card" id="tema-protanopia" onclick="aplicarTema('protanopia')" aria-pressed="false" aria-label="Tema para protanopia — otimizado para daltonismo vermelho-verde">
+                                    <div class="acess-tema-preview tema-prev-protanopia"></div>
+                                    <span class="acess-tema-nome">Protanopia</span>
+                                    <span class="acess-tema-desc">Daltonismo vermelho-verde</span>
+                                </button>
+
+                                <button class="acess-tema-card" id="tema-deuteranopia" onclick="aplicarTema('deuteranopia')" aria-pressed="false" aria-label="Tema para deuteranopia — azul e laranja">
+                                    <div class="acess-tema-preview tema-prev-deuteranopia"></div>
+                                    <span class="acess-tema-nome">Deuteranopia</span>
+                                    <span class="acess-tema-desc">Azul e laranja</span>
+                                </button>
+
+                            </div>
+                        </div>
+
+                        <div class="acess-divider"></div>
+                        <div class="acess-grupo">
+                            <div class="acess-grupo-header">
+                                <span class="acess-grupo-icon">🖥️</span>
+                                <h3 class="acess-grupo-titulo">Tema da Interface</h3>
+                            </div>
+                            <p class="acess-descricao">Escolha como o tema da interface será exibido.</p>
+                            <div class="acess-temas-grid acess-interface-grid">
+
+                                <button class="acess-tema-card" id="interface-claro" onclick="aplicarInterfaceTema('claro')" aria-pressed="false" aria-label="Interface com fundo claro e texto escuro">
+                                    <div class="acess-tema-preview interface-prev-claro"></div>
+                                    <span class="acess-tema-nome">Claro</span>
+                                    <span class="acess-tema-desc">Interface com fundo claro e texto escuro.</span>
+                                </button>
+
+                                <button class="acess-tema-card" id="interface-escuro" onclick="aplicarInterfaceTema('escuro')" aria-pressed="false" aria-label="Interface com fundo escuro e texto claro">
+                                    <div class="acess-tema-preview interface-prev-escuro"></div>
+                                    <span class="acess-tema-nome">Escuro</span>
+                                    <span class="acess-tema-desc">Interface com fundo escuro e texto claro.</span>
+                                </button>
+
+                                <button class="acess-tema-card" id="interface-sistema" onclick="aplicarInterfaceTema('sistema')" aria-pressed="false" aria-label="Interface adaptada ao tema do sistema operacional">
+                                    <div class="acess-tema-preview interface-prev-sistema"></div>
+                                    <span class="acess-tema-nome">De acordo com o sistema</span>
+                                    <span class="acess-tema-desc">A interface se adapta automaticamente ao tema configurado no sistema operacional ou navegador.</span>
+                                </button>
+
+                            </div>
+                        </div>
+
+                        <div class="acess-divider"></div>
+                        <div class="acess-grupo">
+                            <div class="acess-grupo-header">
+                                <span class="acess-grupo-icon">⚙️</span>
+                                <h3 class="acess-grupo-titulo">Opções Visuais e Motoras</h3>
+                            </div>
+                            <div class="acess-toggles">
+
+                                <div class="acess-toggle-item">
+                                    <div class="acess-toggle-info">
+                                        <span class="acess-toggle-icon">🚫</span>
+                                        <div>
+                                            <p class="acess-toggle-titulo">Remover Animações</p>
+                                            <p class="acess-toggle-desc">Desativa todas as animações e transições</p>
+                                        </div>
+                                    </div>
+                                    <button class="acess-toggle" id="toggle-animacoes" role="switch" aria-checked="false" onclick="toggleAnimacoes()" aria-label="Remover animações">
+                                        <span class="acess-toggle-thumb"></span>
+                                    </button>
+                                </div>
+
+                                <div class="acess-toggle-item">
+                                    <div class="acess-toggle-info">
+                                        <span class="acess-toggle-icon">📏</span>
+                                        <div>
+                                            <p class="acess-toggle-titulo">Espaçamento Ampliado</p>
+                                            <p class="acess-toggle-desc">Aumenta o espaço entre linhas e parágrafos</p>
+                                        </div>
+                                    </div>
+                                    <button class="acess-toggle" id="toggle-espacamento" role="switch" aria-checked="false" onclick="toggleEspacamento()" aria-label="Espaçamento ampliado">
+                                        <span class="acess-toggle-thumb"></span>
+                                    </button>
+                                </div>
+
+                                <div class="acess-toggle-item">
+                                    <div class="acess-toggle-info">
+                                        <span class="acess-toggle-icon">🖱️</span>
+                                        <div>
+                                            <p class="acess-toggle-titulo">Cursor Ampliado</p>
+                                            <p class="acess-toggle-desc">Aumenta o cursor do mouse para melhor visibilidade</p>
+                                        </div>
+                                    </div>
+                                    <button class="acess-toggle" id="toggle-cursor" role="switch" aria-checked="false" onclick="toggleCursor()" aria-label="Cursor ampliado">
+                                        <span class="acess-toggle-thumb"></span>
+                                    </button>
+                                </div>
+
+                                <div class="acess-toggle-item">
+                                    <div class="acess-toggle-info">
+                                        <span class="acess-toggle-icon">🔍</span>
+                                        <div>
+                                            <p class="acess-toggle-titulo">Realçar Foco</p>
+                                            <p class="acess-toggle-desc">Destaca visualmente o elemento focado pelo teclado</p>
+                                        </div>
+                                    </div>
+                                    <button class="acess-toggle" id="toggle-foco" role="switch" aria-checked="false" onclick="toggleFoco()" aria-label="Realçar foco">
+                                        <span class="acess-toggle-thumb"></span>
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="acess-divider"></div>
+                        <div class="acess-grupo">
+                            <div class="acess-grupo-header">
+                                <span class="acess-grupo-icon">🔊</span>
+                                <h3 class="acess-grupo-titulo">Leitor de Texto</h3>
+                            </div>
+                            <p class="acess-descricao">Selecione qualquer parágrafo abaixo e ouça a leitura em voz alta</p>
+
+                            <div class="acess-leitor">
+                                <div class="acess-leitor-textarea-wrap">
+                                    <label for="leitor-input" class="sr-only">Texto para leitura</label>
+                                    <textarea id="leitor-input" class="acess-leitor-input"
+                                              placeholder="Cole ou digite aqui o texto que deseja ouvir...&#10;&#10;Dica: você pode copiar qualquer trecho da redação ou das explicações da plataforma e colar aqui para ouvir a leitura!"
+                                              aria-label="Área de texto para leitura em voz alta"
+                                              rows="5"></textarea>
+                                </div>
+
+                                <div class="acess-leitor-controles">
+                                    <div class="acess-leitor-cfg">
+                                        <label class="acess-cfg-label" for="leitor-velocidade">
+                                            <span>🏃</span> Velocidade
+                                        </label>
+                                        <input type="range" id="leitor-velocidade" class="acess-range"
+                                               min="0.5" max="2" step="0.1" value="1"
+                                               aria-label="Velocidade de leitura"
+                                               oninput="atualizarVelocidade(this.value)">
+                                        <span class="acess-range-val" id="val-velocidade">1.0x</span>
+                                    </div>
+
+                                    <div class="acess-leitor-cfg">
+                                        <label class="acess-cfg-label" for="leitor-tom">
+                                            <span>🎵</span> Tom
+                                        </label>
+                                        <input type="range" id="leitor-tom" class="acess-range"
+                                               min="0.5" max="2" step="0.1" value="1"
+                                               aria-label="Tom da voz"
+                                               oninput="atualizarTom(this.value)">
+                                        <span class="acess-range-val" id="val-tom">1.0</span>
+                                    </div>
+                                </div>
+
+                                <div class="acess-leitor-btns">
+                                    <button class="acess-btn acess-btn-destaque acess-btn-lg" id="btn-ler" onclick="lerTexto()" aria-label="Iniciar leitura">
+                                        <span class="acess-btn-icon">▶</span>
+                                        <span class="acess-btn-label">Ler em Voz Alta</span>
+                                    </button>
+                                    <button class="acess-btn" id="btn-pausar" onclick="pausarLeitura()" aria-label="Pausar leitura" disabled>
+                                        <span class="acess-btn-icon">⏸</span>
+                                        <span class="acess-btn-label">Pausar</span>
+                                    </button>
+                                    <button class="acess-btn" id="btn-parar" onclick="pararLeitura()" aria-label="Parar leitura" disabled>
+                                        <span class="acess-btn-icon">⏹</span>
+                                        <span class="acess-btn-label">Parar</span>
+                                    </button>
+                                </div>
+
+                                <div class="acess-leitor-status" id="leitor-status" aria-live="assertive" aria-atomic="true"></div>
+                            </div>
+                        </div>
+
+                        <div class="acess-divider"></div>
+                        <div class="acess-reset-geral">
+                            <button class="acess-btn acess-btn-reset acess-btn-lg" onclick="resetarTudo()" aria-label="Restaurar todas as configurações padrão">
+                                <span class="acess-btn-icon">↺</span>
+                                <span class="acess-btn-label">Restaurar Todas as Configurações</span>
+                            </button>
+                            <p class="acess-reset-nota">As preferências são salvas automaticamente para sua próxima visita</p>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+        </div>
+        <footer class="page-footer fade-in">
+            <div class="card card-footer">
+                <p class="footer-message">
+                    <span class="footer-icon">❤️</span>
+                    Desenvolvido com dedicação para ajudar você a conquistar a nota 1000!
+                </p>
+                <p class="footer-copyright">
+                    © 2026 - Plataforma ENEM - Todos os direitos reservados
+                </p>
+            </div>
+        </footer>
+
+    </main>
+    <div id="notificacoes-container" class="notificacoes-container" role="region" aria-live="polite"></div>
+
+    <script src="TCC.js"></script>
+
+</body>
+</html>
