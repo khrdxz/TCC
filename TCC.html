@@ -38,9 +38,9 @@
         </div>
         <div class="navbar-search-bar" id="navbar-search-bar" aria-hidden="true">
             <div class="search-bar-inner">
-                <svg class="search-bar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg class="search-bar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" preserveAspectRatio="xMidYMid meet">
                     <circle cx="11" cy="11" r="8"/>
-                    <path d="m21 21-4.35-4.35"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
                 </svg>
                 <input type="search" id="search-input" class="search-bar-input" placeholder="Buscar competência, tema, dica..." autocomplete="off" aria-label="Campo de busca"/>
                 <button class="search-bar-close" onclick="toggleBusca()" aria-label="Fechar busca">✕</button>
@@ -236,7 +236,6 @@
                             <span class="tag tag-primary">Acentuação</span>
                             <span class="tag tag-primary">Pontuação</span>
                             <span class="tag tag-warning">Análise Crítica</span>
-                            <span class="tag tag-info">ENEM 2026</span>
                             <span class="tag tag-success">Concordância</span>
                             <span class="tag tag-warning">Regência</span>
                             <span class="tag tag-primary">Crase</span>
@@ -918,6 +917,34 @@
     </main>
     <div id="notificacoes-container" class="notificacoes-container" role="region" aria-live="polite"></div>
 
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAgAp3PWV0du0k_qBxvXJE8KmAemDAz2Wg",
+    authDomain: "plataforma-enem-f2185.firebaseapp.com",
+    projectId: "plataforma-enem-f2185",
+    storageBucket: "plataforma-enem-f2185.firebasestorage.app",
+    messagingSenderId: "663205854300",
+    appId: "1:663205854300:web:55256104cde186f61bba99"
+  };
+
+  // Initialize Firebase
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+
+  // Teste de conexão
+  if (app.name) {
+    console.log("✅ Firebase conectado com sucesso ao projeto:", firebaseConfig.projectId);
+  } else {
+    console.error("❌ Falha na conexão com o Firebase.");
+  }
+</script>
+    
     <script src="TCC.js"></script>
 
 </body>
