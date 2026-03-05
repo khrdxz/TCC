@@ -174,7 +174,6 @@ strong { font-weight: 600; color: var(--text-main); }
   transition: all var(--t-fast);
 }
 .navbar-icon-btn:hover { color: var(--text-main); background: var(--bg-surface-hover); }
-.navbar-icon-btn svg { width: 20px; height: 20px; }
 
 .navbar-cta-btn {
   display: flex; align-items: center; gap: 0.5rem;
@@ -188,21 +187,138 @@ strong { font-weight: 600; color: var(--text-main); }
 
 /* Busca */
 .navbar-search-bar {
-  overflow: hidden; max-height: 0;
+  overflow: hidden;
+  max-height: 0;
   transition: max-height 0.4s ease, border-color 0.4s ease;
   background: var(--bg-surface);
 }
-.navbar-search-bar.aberta { max-height: 300px; border-bottom: 1px solid var(--border-light); }
-.search-bar-inner { max-width: 700px; margin: 0 auto; padding: 1rem 2rem; display: flex; align-items: center; gap: 1rem; }
+.navbar-search-bar.aberta {
+  max-height: 300px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.search-bar-inner {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: clamp(0.75rem, 2vw, 1rem) clamp(1rem, 4vw, 2rem);
+  display: flex;
+  align-items: center;
+  gap: clamp(0.5rem, 2vw, 1rem);
+}
+
+/* ── Ícone de lupa da barra de busca ── */
+.search-bar-icon {
+  /* Tamanho base fixo e responsivo */
+  width: clamp(18px, 2.5vw, 22px);
+  height: clamp(18px, 2.5vw, 22px);
+
+  /* Impede que o flex container distorça o ícone */
+  flex: 0 0 auto;
+
+  /* Garante que o SVG não seja cortado */
+  display: block;
+  overflow: visible;
+
+  /* Cor herdada do contexto */
+  color: var(--text-muted);
+
+  /* Proporção correta: preserva aspecto sem distorção */
+  aspect-ratio: 1 / 1;
+
+  /* Alinhamento vertical suave */
+  vertical-align: middle;
+
+  transition: color var(--t-fast);
+}
+
+/* Ícone reage ao foco do input */
+.search-bar-inner:focus-within .search-bar-icon {
+  color: var(--primary);
+}
+
+/* Ícone de lupa no botão da navbar (toggle) */
+.navbar-icon-btn svg {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+  display: block;
+  overflow: visible;
+  aspect-ratio: 1 / 1;
+}
+
 .search-bar-input {
-  flex: 1; background: transparent; border: none;
+  flex: 1;
+  min-width: 0; /* Evita overflow em flex containers */
+  background: transparent;
+  border: none;
   border-bottom: 2px solid var(--border-light);
-  color: var(--text-main); font-family: var(--font-sans); font-size: 1rem;
-  padding: 0.5rem 0; outline: none; transition: border-color var(--t-fast);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  padding: 0.5rem 0;
+  outline: none;
+  transition: border-color var(--t-fast);
 }
 .search-bar-input:focus { border-bottom-color: var(--primary); }
-.search-bar-close { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.2rem; transition: color var(--t-fast); }
-.search-bar-close:hover { color: var(--error); }
+
+.search-bar-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  transition: color var(--t-fast), background var(--t-fast);
+}
+.search-bar-close:hover { color: var(--error); background: rgba(239, 68, 68, 0.1); }
+
+/* ── Responsividade do ícone ── */
+
+/* Mobile pequeno (≤ 480px) */
+@media (max-width: 480px) {
+  .search-bar-icon {
+    width: 18px;
+    height: 18px;
+  }
+  .search-bar-inner {
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+  }
+}
+
+/* Tablet (481px – 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .search-bar-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Desktop comum (769px – 1440px) */
+@media (min-width: 769px) and (max-width: 1440px) {
+  .search-bar-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Ultrawide / TV (> 1440px) */
+@media (min-width: 1441px) {
+  .search-bar-icon {
+    width: 22px;
+    height: 22px;
+  }
+  .navbar-icon-btn svg {
+    width: 22px;
+    height: 22px;
+  }
+}
 
 /* Menu Lateral (Drawer) */
 .nav-drawer-overlay {
