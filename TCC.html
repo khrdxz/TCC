@@ -537,62 +537,80 @@
                     <div class="card-header">
                         <h2 class="card-title">
                             <span class="icon">🎯</span>
-                            Área de Prática - Identifique os Erros!
+                            Área de Prática
                         </h2>
-                        <p class="card-subtitle">Treine suas habilidades de análise textual</p>
+                        <p class="card-subtitle">Escolha seu modo de treino e evolua sua escrita</p>
                     </div>
 
                     <div class="card-body">
-                        <div class="alert alert-info">
-                            <span class="alert-icon">ℹ️</span>
-                            <div class="alert-content">
-                                <strong>Como funciona:</strong>
-                                <ol class="instrucoes-lista">
-                                    <li>Digite seu nome e escolha um tema (ou deixe aleatório)</li>
-                                    <li>Clique em "Gerar Redação" para criar um texto com erros propositais</li>
-                                    <li>Clique nas palavras/trechos onde você identifica problemas</li>
-                                    <li>Ao finalizar, veja sua pontuação e aprenda com os erros!</li>
-                                </ol>
+
+                        <!-- SELETOR DE MODO -->
+                        <div class="modos-pratica" style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:2rem;">
+                            <button class="acess-btn modo-btn modo-btn-ativo" data-modo="cacador"
+                                    onclick="selecionarModo('cacador')" aria-pressed="true">
+                                <span>🔍</span> Caçador de Erros
+                            </button>
+                            <button class="acess-btn modo-btn" data-modo="multipla"
+                                    onclick="selecionarModo('multipla')" aria-pressed="false">
+                                <span>📝</span> Múltipla Escolha
+                            </button>
+                            <button class="acess-btn modo-btn" data-modo="digitacao"
+                                    onclick="selecionarModo('digitacao')" aria-pressed="false">
+                                <span>⌨️</span> Digitação Corretiva
+                            </button>
+                        </div>
+
+                        <!-- MODO CAÇADOR: config -->
+                        <div id="area-config-cacador">
+                            <div class="alert alert-info" style="margin-bottom:1.5rem;">
+                                <span class="alert-icon">ℹ️</span>
+                                <div class="alert-content">
+                                    <strong>Como funciona:</strong>
+                                    <ol class="instrucoes-lista">
+                                        <li>Digite seu nome e escolha um tema (ou deixe aleatório)</li>
+                                        <li>Clique em "Gerar Redação" — o texto terá erros propositais escondidos</li>
+                                        <li>Clique nas palavras que você suspeita conter erros</li>
+                                        <li>Ao finalizar, veja sua pontuação e aprenda com o gabarito!</li>
+                                    </ol>
+                                </div>
+                            </div>
+                            <div class="pratica-config">
+                                <div class="form-group">
+                                    <label for="nome-usuario" class="form-label">
+                                        <span class="label-icon">👤</span>
+                                        Seu Nome
+                                    </label>
+                                    <input type="text" id="nome-usuario" class="form-input"
+                                           placeholder="Digite seu nome para começar" maxlength="50">
+                                </div>
+                                <div class="form-group">
+                                    <label for="tema-select" class="form-label">
+                                        <span class="label-icon">📖</span>
+                                        Escolha um Tema
+                                    </label>
+                                    <select id="tema-select" class="form-select">
+                                        <option value="aleatorio">🎲 Tema Aleatório</option>
+                                        <option value="educacao">📚 Educação e Tecnologia</option>
+                                        <option value="meio-ambiente">🌿 Meio Ambiente e Sustentabilidade</option>
+                                        <option value="saude-mental">🧠 Saúde Mental no Brasil</option>
+                                        <option value="desigualdade">⚖️ Desigualdade Social</option>
+                                        <option value="violencia">👥 Violência contra a Mulher</option>
+                                        <option value="internet">🌐 Democratização do Acesso à Internet</option>
+                                        <option value="trabalho">🤖 O Futuro do Trabalho</option>
+                                        <option value="racismo">✊🏾 Racismo Estrutural</option>
+                                    </select>
+                                </div>
+                                <div class="form-actions">
+                                    <button id="btn-gerar-redacao" class="btn btn-primary btn-large"
+                                            onclick="gerarRedacao()">
+                                        <span class="btn-icon">🌾</span>
+                                        <span class="btn-text">Gerar Redação para Análise</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        <div class="pratica-config">
-                            <div class="form-group">
-                                <label for="nome-usuario" class="form-label">
-                                    <span class="label-icon">👤</span>
-                                    Seu Nome
-                                </label>
-                                <input type="text"
-                                       id="nome-usuario"
-                                       class="form-input"
-                                       placeholder="Digite seu nome para começar"
-                                       maxlength="50">
-                            </div>
 
-                            <div class="form-group">
-                                <label for="tema-select" class="form-label">
-                                    <span class="label-icon">📖</span>
-                                    Escolha um Tema (opcional)
-                                </label>
-                                <select id="tema-select" class="form-select">
-                                    <option value="aleatorio">🎲 Tema Aleatório</option>
-                                    <option value="educacao">📚 Educação e Tecnologia</option>
-                                    <option value="meio-ambiente">🌿 Meio Ambiente e Sustentabilidade</option>
-                                    <option value="saude-mental">🧠 Saúde Mental no Brasil</option>
-                                    <option value="desigualdade">⚖️ Desigualdade Social</option>
-                                    <option value="violencia">👥 Violência contra a Mulher</option>
-                                    <option value="internet">🌐 Democratização do Acesso à Internet</option>
-                                </select>
-                            </div>
-
-                            <div class="form-actions">
-                                <button id="btn-gerar-redacao"
-                                        class="btn btn-primary btn-large"
-                                        onclick="gerarRedacao()">
-                                    <span class="btn-icon">🌾</span>
-                                    <span class="btn-text">Gerar Redação para Análise</span>
-                                </button>
-                            </div>
-                        </div>
+                        <!-- REDAÇÃO (modo caçador) -->
                         <div id="redacao-container" class="redacao-container hidden">
                             <div class="redacao-header">
                                 <h3 id="titulo-redacao" class="redacao-titulo"></h3>
@@ -607,10 +625,7 @@
                                     </span>
                                 </div>
                             </div>
-
-                            <div id="texto-redacao" class="texto-redacao" role="region" aria-label="Texto da redação">
-                            </div>
-
+                            <div id="texto-redacao" class="texto-redacao" role="region" aria-label="Texto da redação"></div>
                             <div class="acoes-redacao">
                                 <button id="btn-finalizar" class="btn btn-success" onclick="finalizarAnalise()">
                                     <span class="btn-icon">✅</span>
@@ -626,6 +641,8 @@
                                 </button>
                             </div>
                         </div>
+
+                        <!-- RESULTADO (modo caçador) -->
                         <div id="resultado-container" class="resultado-container hidden">
                             <div class="resultado-header">
                                 <h3 class="resultado-titulo">
@@ -633,19 +650,41 @@
                                     Resultado da Sua Análise
                                 </h3>
                             </div>
-
-                            <div id="resultado-pontuacao" class="resultado-pontuacao">
-                            </div>
-
-                            <div id="resultado-detalhes" class="resultado-detalhes">
-                            </div>
-
+                            <div id="resultado-pontuacao" class="resultado-pontuacao"></div>
+                            <div id="resultado-detalhes" class="resultado-detalhes"></div>
                             <div class="resultado-acoes">
                                 <button class="btn btn-primary" onclick="reiniciarPratica()">
                                     <span class="btn-icon">🔄</span>
                                     <span class="btn-text">Praticar Novamente</span>
                                 </button>
                             </div>
+                        </div>
+
+                        <!-- PAINEL MÚLTIPLA ESCOLHA -->
+                        <div id="painel-multipla" class="hidden"></div>
+
+                        <!-- PAINEL DIGITAÇÃO CORRETIVA -->
+                        <div id="painel-digitacao" class="hidden"></div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- HISTÓRICO DE PRÁTICAS -->
+            <section class="fade-in">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="icon">📋</span>
+                            Histórico de Práticas
+                        </h2>
+                        <p class="card-subtitle">Suas últimas 5 sessões de treino</p>
+                    </div>
+                    <div class="card-body">
+                        <div id="historico-container">
+                            <p style="color:var(--text-muted);text-align:center;padding:1.5rem 0;">
+                                Nenhuma prática registrada ainda. Comece agora! 🌱
+                            </p>
                         </div>
                     </div>
                 </div>
