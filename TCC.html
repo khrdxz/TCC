@@ -2,7 +2,11 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#09090b">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="description" content="Plataforma interativa de preparação para redação do ENEM 2026. Pratique identificação de erros, aprenda com feedback detalhado e alcance a nota 1000!">
     <meta name="keywords" content="ENEM, redação, preparação, nota 1000, gramática, português, vestibular">
     <meta name="author" content="Plataforma ENEM 2026">
@@ -30,6 +34,23 @@
                         <path d="m21 21-4.35-4.35"/>
                     </svg>
                 </button>
+
+                <!-- Botão de Perfil/Login -->
+                <button class="navbar-icon-btn navbar-perfil-btn" id="btn-perfil-nav"
+                        onclick="toggleModalPerfil()"
+                        aria-label="Meu perfil" title="Meu Perfil">
+                    <!-- Avatar compacto (foto ou ícone padrão) -->
+                    <span class="navbar-avatar" id="navbar-avatar">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                             stroke-linecap="round" stroke-linejoin="round" width="20" height="20" id="navbar-avatar-icon">
+                            <circle cx="12" cy="8" r="4"/>
+                            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                        </svg>
+                        <img id="navbar-avatar-foto" src="" alt="" class="navbar-avatar-img hidden"/>
+                    </span>
+                    <span class="navbar-perfil-dot hidden" id="navbar-perfil-dot" title="Logado"></span>
+                </button>
+
                 <button class="navbar-cta-btn" onclick="ativarAba('pratica')" aria-label="Praticar agora">
                     🌾 Praticar Agora
                 </button>
@@ -941,6 +962,312 @@
             </section>
 
         </div>
+        <!-- ══════════════════════════════════════════════════════════════════
+             PAINEL PERFIL & DESEMPENHO
+             ══════════════════════════════════════════════════════════════════ -->
+        <div id="panel-perfil" class="tab-panel" role="tabpanel" aria-labelledby="tab-perfil">
+
+            <header class="page-header">
+                <h1 class="main-title fade-in">
+                    <span class="title-icon">👤</span>
+                    Meu Perfil
+                    <span class="title-subtitle">Acompanhe seu desempenho e gerencie sua conta</span>
+                </h1>
+            </header>
+
+            <div class="perfil-layout">
+
+                <!-- ── COLUNA ESQUERDA: Perfil do Usuário ── -->
+                <div class="perfil-col-esquerda">
+
+                    <!-- Card: Informações do Usuário -->
+                    <div class="card card-perfil-usuario fade-in" id="card-usuario">
+
+                        <!-- Skeleton de carregamento -->
+                        <div class="perfil-skeleton" id="perfil-skeleton" aria-hidden="true">
+                            <div class="skel-avatar"></div>
+                            <div class="skel-linha skel-lg"></div>
+                            <div class="skel-linha skel-md"></div>
+                            <div class="skel-linha skel-sm"></div>
+                        </div>
+
+                        <!-- Conteúdo real (oculto até carregar) -->
+                        <div class="perfil-usuario-conteudo hidden" id="perfil-usuario-conteudo">
+
+                            <div class="perfil-avatar-wrapper">
+                                <div class="perfil-avatar" id="perfil-avatar" aria-label="Foto de perfil">
+                                    <img id="perfil-foto" src="" alt="Foto de perfil" class="perfil-foto hidden"/>
+                                    <span id="perfil-iniciais" class="perfil-iniciais" aria-hidden="true"></span>
+                                </div>
+                                <span class="perfil-nivel-badge" id="perfil-nivel-badge" title="Nível atual">1</span>
+                            </div>
+
+                            <div class="perfil-dados">
+                                <h2 class="perfil-nome" id="perfil-nome">Carregando...</h2>
+                                <p class="perfil-titulo-nivel" id="perfil-titulo-nivel">—</p>
+
+                                <div class="perfil-info-lista">
+                                    <div class="perfil-info-item">
+                                        <span class="perfil-info-icone" aria-hidden="true">✉️</span>
+                                        <div>
+                                            <span class="perfil-info-label">E-mail</span>
+                                            <span class="perfil-info-valor" id="perfil-email">—</span>
+                                        </div>
+                                    </div>
+                                    <div class="perfil-info-item">
+                                        <span class="perfil-info-icone" aria-hidden="true">📅</span>
+                                        <div>
+                                            <span class="perfil-info-label">Membro desde</span>
+                                            <span class="perfil-info-valor" id="perfil-criacao">—</span>
+                                        </div>
+                                    </div>
+                                    <div class="perfil-info-item">
+                                        <span class="perfil-info-icone" aria-hidden="true">🕐</span>
+                                        <div>
+                                            <span class="perfil-info-label">Último acesso</span>
+                                            <span class="perfil-info-valor" id="perfil-ultimo-acesso">—</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Estado: não logado -->
+                        <div class="perfil-nao-logado hidden" id="perfil-nao-logado">
+                            <span class="perfil-nao-logado-icone" aria-hidden="true">🔒</span>
+                            <p>Você não está conectado.</p>
+                            <button class="btn btn-primary" onclick="ativarAba('inicio')">Fazer Login</button>
+                        </div>
+
+                    </div>
+                    <!-- /card-perfil-usuario -->
+
+                    <!-- Card: Métodos de Login -->
+                    <div class="card fade-in" id="card-login-metodos">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <span class="icon" aria-hidden="true">🔐</span>
+                                <h3>Métodos de Login</h3>
+                            </div>
+                            <p class="card-subtitle">Gerencie como você acessa a plataforma</p>
+                        </div>
+
+                        <div class="login-metodos-lista" id="login-metodos-lista" role="list">
+
+                            <!-- Google -->
+                            <div class="login-metodo-item" id="metodo-google" role="listitem" data-provider="google.com">
+                                <div class="login-metodo-info">
+                                    <span class="login-metodo-icone" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+                                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                                        </svg>
+                                    </span>
+                                    <div>
+                                        <span class="login-metodo-nome">Google</span>
+                                        <span class="login-metodo-status" id="status-google">Verificando...</span>
+                                    </div>
+                                </div>
+                                <button class="login-metodo-btn" id="btn-google"
+                                        onclick="alternarProvedorLogin('google.com')"
+                                        aria-label="Gerenciar login com Google">—</button>
+                            </div>
+
+                            <!-- E-mail e Senha -->
+                            <div class="login-metodo-item" id="metodo-password" role="listitem" data-provider="password">
+                                <div class="login-metodo-info">
+                                    <span class="login-metodo-icone" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                                             stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                                            <rect x="2" y="4" width="20" height="16" rx="2"/>
+                                            <polyline points="22,4 12,13 2,4"/>
+                                        </svg>
+                                    </span>
+                                    <div>
+                                        <span class="login-metodo-nome">E-mail e Senha</span>
+                                        <span class="login-metodo-status" id="status-password">Verificando...</span>
+                                    </div>
+                                </div>
+                                <button class="login-metodo-btn" id="btn-password"
+                                        onclick="alternarProvedorLogin('password')"
+                                        aria-label="Gerenciar login com E-mail e Senha">—</button>
+                            </div>
+
+                            <!-- Apple -->
+                            <div class="login-metodo-item" id="metodo-apple" role="listitem" data-provider="apple.com">
+                                <div class="login-metodo-info">
+                                    <span class="login-metodo-icone" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+                                            <path fill="currentColor" d="M14.94 5.19A4.38 4.38 0 0 0 16 2a4.44 4.44 0 0 0-3 1.52 4.17 4.17 0 0 0-1 3.09 3.69 3.69 0 0 0 2.94-1.42zm2.52 7.44a4.51 4.51 0 0 1 2.16-3.81 4.66 4.66 0 0 0-3.66-2c-1.56-.16-3 .91-3.83.91s-2-.89-3.3-.87a4.92 4.92 0 0 0-4.14 2.53C2.89 12.28 4 16.2 5.5 18.37c.75 1.07 1.62 2.27 2.77 2.22s1.54-.7 2.89-.7 1.73.7 2.91.67 1.95-1.07 2.68-2.15a11.09 11.09 0 0 0 1.2-2.48 4.39 4.39 0 0 1-2.49-3.3z"/>
+                                        </svg>
+                                    </span>
+                                    <div>
+                                        <span class="login-metodo-nome">Apple ID</span>
+                                        <span class="login-metodo-status" id="status-apple">Verificando...</span>
+                                    </div>
+                                </div>
+                                <button class="login-metodo-btn" id="btn-apple"
+                                        onclick="alternarProvedorLogin('apple.com')"
+                                        aria-label="Gerenciar login com Apple ID">—</button>
+                            </div>
+
+                            <!-- GitHub -->
+                            <div class="login-metodo-item" id="metodo-github" role="listitem" data-provider="github.com">
+                                <div class="login-metodo-info">
+                                    <span class="login-metodo-icone" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+                                            <path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+                                        </svg>
+                                    </span>
+                                    <div>
+                                        <span class="login-metodo-nome">GitHub</span>
+                                        <span class="login-metodo-status" id="status-github">Verificando...</span>
+                                    </div>
+                                </div>
+                                <button class="login-metodo-btn" id="btn-github"
+                                        onclick="alternarProvedorLogin('github.com')"
+                                        aria-label="Gerenciar login com GitHub">—</button>
+                            </div>
+
+                        </div>
+
+                        <p class="login-seguranca-nota" aria-live="polite">
+                            <span aria-hidden="true">🛡️</span>
+                            Para desconectar um método, você deve ter pelo menos um método ativo.
+                        </p>
+                    </div>
+                    <!-- /card-login-metodos -->
+
+                </div>
+                <!-- /perfil-col-esquerda -->
+
+                <!-- ── COLUNA DIREITA: Desempenho ── -->
+                <div class="perfil-col-direita">
+
+                    <!-- Card: Estatísticas de Desempenho -->
+                    <div class="card fade-in" id="card-desempenho">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <span class="icon" aria-hidden="true">📊</span>
+                                <h3>Desempenho na Plataforma</h3>
+                            </div>
+                            <p class="card-subtitle">Sua evolução em tempo real</p>
+                        </div>
+
+                        <!-- Progresso Geral -->
+                        <div class="desempenho-progresso-card">
+                            <div class="desempenho-progresso-header">
+                                <span class="desempenho-progresso-label">Progresso para o próximo nível</span>
+                                <span class="desempenho-progresso-valor" id="progresso-pct">0%</span>
+                            </div>
+                            <div class="desempenho-barra-container" role="progressbar"
+                                 aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
+                                 aria-label="Progresso geral" id="barra-progresso-container">
+                                <div class="desempenho-barra" id="barra-progresso"></div>
+                            </div>
+                            <p class="desempenho-progresso-descricao" id="progresso-desc">Continue praticando para subir de nível!</p>
+                        </div>
+
+                        <!-- Grid de Estatísticas -->
+                        <div class="desempenho-stats-grid">
+
+                            <div class="desempenho-stat-card" title="Pontuação total acumulada">
+                                <div class="desempenho-stat-icone desempenho-stat-primary" aria-hidden="true">⭐</div>
+                                <div class="desempenho-stat-info">
+                                    <span class="desempenho-stat-valor" id="stat-pontuacao">0</span>
+                                    <span class="desempenho-stat-label">Pontuação Total</span>
+                                </div>
+                            </div>
+
+                            <div class="desempenho-stat-card" title="Redações analisadas">
+                                <div class="desempenho-stat-icone desempenho-stat-accent" aria-hidden="true">📝</div>
+                                <div class="desempenho-stat-info">
+                                    <span class="desempenho-stat-valor" id="stat-redacoes">0</span>
+                                    <span class="desempenho-stat-label">Redações Feitas</span>
+                                </div>
+                            </div>
+
+                            <div class="desempenho-stat-card" title="Total de acertos em exercícios">
+                                <div class="desempenho-stat-icone desempenho-stat-success" aria-hidden="true">✅</div>
+                                <div class="desempenho-stat-info">
+                                    <span class="desempenho-stat-valor" id="stat-acertos">0</span>
+                                    <span class="desempenho-stat-label">Acertos</span>
+                                </div>
+                            </div>
+
+                            <div class="desempenho-stat-card" title="Maior sequência de dias">
+                                <div class="desempenho-stat-icone desempenho-stat-warning" aria-hidden="true">🔥</div>
+                                <div class="desempenho-stat-info">
+                                    <span class="desempenho-stat-valor" id="stat-sequencia">0</span>
+                                    <span class="desempenho-stat-label">Maior Sequência</span>
+                                </div>
+                            </div>
+
+                            <div class="desempenho-stat-card" title="Nível atual na plataforma">
+                                <div class="desempenho-stat-icone desempenho-stat-primary" aria-hidden="true">🏆</div>
+                                <div class="desempenho-stat-info">
+                                    <span class="desempenho-stat-valor" id="stat-nivel">1</span>
+                                    <span class="desempenho-stat-label">Nível Atual</span>
+                                </div>
+                            </div>
+
+                            <div class="desempenho-stat-card" title="XP acumulado">
+                                <div class="desempenho-stat-icone desempenho-stat-info" aria-hidden="true">⚡</div>
+                                <div class="desempenho-stat-info">
+                                    <span class="desempenho-stat-valor" id="stat-xp">0</span>
+                                    <span class="desempenho-stat-label">XP Total</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Última Atividade -->
+                        <div class="desempenho-ultima-atividade" id="ultima-atividade-box">
+                            <span class="desempenho-ult-icone" aria-hidden="true">🕐</span>
+                            <div>
+                                <span class="desempenho-ult-label">Última Atividade</span>
+                                <span class="desempenho-ult-valor" id="stat-ultima-atividade">Nenhuma atividade registrada</span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- /card-desempenho -->
+
+                    <!-- Card: Histórico Recente -->
+                    <div class="card fade-in" id="card-historico-perfil">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <span class="icon" aria-hidden="true">📋</span>
+                                <h3>Histórico Recente</h3>
+                            </div>
+                            <p class="card-subtitle">Suas últimas atividades na plataforma</p>
+                        </div>
+
+                        <div class="historico-lista" id="historico-lista-perfil" role="list">
+                            <div class="historico-vazio" id="historico-vazio-perfil">
+                                <span aria-hidden="true">📭</span>
+                                <p>Nenhuma atividade ainda. Comece a praticar!</p>
+                                <button class="btn btn-primary btn-sm" onclick="ativarAba('pratica')">
+                                    Começar Prática
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- /card-historico-perfil -->
+
+                </div>
+                <!-- /perfil-col-direita -->
+
+            </div>
+            <!-- /perfil-layout -->
+
+        </div>
+        <!-- /panel-perfil -->
+
         <footer class="page-footer fade-in">
             <div class="card card-footer">
                 <p class="footer-message">
@@ -956,33 +1283,223 @@
     </main>
     <div id="notificacoes-container" class="notificacoes-container" role="region" aria-live="polite"></div>
 
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+    <!-- ══════════════════════════════════════════════════════════════════
+         MODAL DE PERFIL / LOGIN
+         ══════════════════════════════════════════════════════════════════ -->
+    <div class="perfil-modal-overlay hidden" id="perfil-modal-overlay"></div>
 
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyAgAp3PWV0du0k_qBxvXJE8KmAemDAz2Wg",
-    authDomain: "plataforma-enem-f2185.firebaseapp.com",
-    projectId: "plataforma-enem-f2185",
-    storageBucket: "plataforma-enem-f2185.firebasestorage.app",
-    messagingSenderId: "663205854300",
-    appId: "1:663205854300:web:55256104cde186f61bba99"
-  };
+    <div class="perfil-modal hidden" id="perfil-modal" role="dialog" aria-modal="true"
+         aria-labelledby="modal-titulo" aria-hidden="true">
 
-  // Initialize Firebase
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
+        <!-- ── PAINEL: NÃO LOGADO ── -->
+        <div id="modal-painel-login" class="modal-painel">
+            <div class="modal-header">
+                <h2 class="modal-titulo" id="modal-titulo">Entrar na plataforma</h2>
+                <button class="modal-fechar-btn" onclick="fecharModalPerfil()" aria-label="Fechar">✕</button>
+            </div>
 
-  // Teste de conexão
-  if (app.name) {
-    console.log("✅ Firebase conectado com sucesso ao projeto:", firebaseConfig.projectId);
-  } else {
-    console.error("❌ Falha na conexão com o Firebase.");
-  }
-</script>
+            <p class="modal-subtitulo">Salve seu progresso e acesse de qualquer lugar</p>
+
+            <!-- Alerta de erro -->
+            <div class="modal-alerta hidden" id="modal-alerta" role="alert"></div>
+
+            <!-- Login com Google -->
+            <button class="modal-btn-social modal-btn-google" id="btn-login-google"
+                    onclick="loginComGoogle()" aria-label="Entrar com Google">
+                <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Continuar com Google
+            </button>
+
+            <div class="modal-divisor"><span>ou entre com e-mail</span></div>
+
+            <!-- Formulário de E-mail/Senha -->
+            <div class="modal-form" id="modal-form-email">
+                <div class="modal-campo">
+                    <label for="modal-email" class="modal-label">E-mail</label>
+                    <input type="email" id="modal-email" class="form-input"
+                           placeholder="seu@email.com" autocomplete="email"/>
+                </div>
+                <div class="modal-campo">
+                    <label for="modal-senha" class="modal-label">Senha</label>
+                    <div class="modal-senha-wrapper">
+                        <input type="password" id="modal-senha" class="form-input"
+                               placeholder="••••••••" autocomplete="current-password"/>
+                        <button type="button" class="modal-senha-toggle"
+                                onclick="toggleSenhaVisivel()" aria-label="Mostrar senha">
+                            <svg id="olho-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <button class="btn btn-primary" style="width:100%;justify-content:center;"
+                        id="btn-login-email" onclick="loginComEmail()">
+                    Entrar
+                </button>
+                <div class="modal-links">
+                    <button class="modal-link" onclick="mostrarEsqueciSenha()">Esqueci minha senha</button>
+                    <button class="modal-link" onclick="mostrarCadastro()">Criar conta</button>
+                </div>
+            </div>
+
+            <!-- Formulário de Cadastro (oculto inicialmente) -->
+            <div class="modal-form hidden" id="modal-form-cadastro">
+                <div class="modal-campo">
+                    <label for="modal-nome" class="modal-label">Nome</label>
+                    <input type="text" id="modal-nome" class="form-input" placeholder="Seu nome"/>
+                </div>
+                <div class="modal-campo">
+                    <label for="modal-email-cad" class="modal-label">E-mail</label>
+                    <input type="email" id="modal-email-cad" class="form-input" placeholder="seu@email.com"/>
+                </div>
+                <div class="modal-campo">
+                    <label for="modal-senha-cad" class="modal-label">Senha</label>
+                    <input type="password" id="modal-senha-cad" class="form-input"
+                           placeholder="Mínimo 6 caracteres"/>
+                </div>
+                <button class="btn btn-primary" style="width:100%;justify-content:center;"
+                        id="btn-cadastrar" onclick="cadastrarEmail()">
+                    Criar Conta
+                </button>
+                <div class="modal-links">
+                    <button class="modal-link" onclick="mostrarLogin()">Já tenho conta</button>
+                </div>
+            </div>
+
+            <!-- Formulário: Esqueci Senha (oculto inicialmente) -->
+            <div class="modal-form hidden" id="modal-form-esqueci">
+                <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1rem;">
+                    Informe seu e-mail e enviaremos um link de recuperação.
+                </p>
+                <div class="modal-campo">
+                    <label for="modal-email-reset" class="modal-label">E-mail</label>
+                    <input type="email" id="modal-email-reset" class="form-input" placeholder="seu@email.com"/>
+                </div>
+                <button class="btn btn-primary" style="width:100%;justify-content:center;"
+                        onclick="enviarResetSenha()">
+                    Enviar link de recuperação
+                </button>
+                <div class="modal-links">
+                    <button class="modal-link" onclick="mostrarLogin()">Voltar ao login</button>
+                </div>
+            </div>
+
+        </div>
+        <!-- /modal-painel-login -->
+
+        <!-- ── PAINEL: LOGADO ── -->
+        <div id="modal-painel-perfil" class="modal-painel hidden">
+            <div class="modal-header">
+                <h2 class="modal-titulo">Meu Perfil</h2>
+                <button class="modal-fechar-btn" onclick="fecharModalPerfil()" aria-label="Fechar">✕</button>
+            </div>
+
+            <!-- Mini perfil -->
+            <div class="modal-mini-perfil">
+                <div class="modal-mini-avatar" id="modal-mini-avatar">
+                    <img id="modal-mini-foto" src="" alt="" class="hidden"/>
+                    <span id="modal-mini-iniciais"></span>
+                </div>
+                <div class="modal-mini-info">
+                    <strong id="modal-mini-nome">—</strong>
+                    <span id="modal-mini-email">—</span>
+                    <span id="modal-mini-nivel" class="modal-mini-nivel-badge">Nível 1</span>
+                </div>
+            </div>
+
+            <!-- Acesso rápido às estatísticas -->
+            <div class="modal-stats-rapido">
+                <div class="modal-stat-item">
+                    <span class="modal-stat-val" id="mstat-xp">0</span>
+                    <span class="modal-stat-lbl">XP</span>
+                </div>
+                <div class="modal-stat-item">
+                    <span class="modal-stat-val" id="mstat-redacoes">0</span>
+                    <span class="modal-stat-lbl">Redações</span>
+                </div>
+                <div class="modal-stat-item">
+                    <span class="modal-stat-val" id="mstat-sequencia">0</span>
+                    <span class="modal-stat-lbl">Sequência 🔥</span>
+                </div>
+            </div>
+
+            <!-- Botões de ação -->
+            <div class="modal-acoes">
+                <button class="btn btn-secondary" style="width:100%;justify-content:center;"
+                        onclick="fecharModalPerfil(); ativarAba('perfil');">
+                    📊 Ver Perfil Completo
+                </button>
+                <button class="modal-btn-sair" onclick="fazerLogout()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                         stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    Sair da Conta
+                </button>
+            </div>
+        </div>
+        <!-- /modal-painel-perfil -->
+
+    </div>
+    <!-- /perfil-modal -->
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+        import { getAnalytics }  from "https://www.gstatic.com/firebasejs/12.10.0/firebase-analytics.js";
+        import {
+            getAuth, onAuthStateChanged,
+            GoogleAuthProvider, GithubAuthProvider, OAuthProvider,
+            signInWithPopup, signInWithEmailAndPassword,
+            createUserWithEmailAndPassword, sendPasswordResetEmail,
+            updateProfile, signOut,
+            linkWithPopup, unlink
+        } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey:            "AIzaSyAtgXJ0g5MRQdm2dRYnytGO468GNUfT1Zw",
+            authDomain:        "plataforma-tcc-8cce4.firebaseapp.com",
+            projectId:         "plataforma-tcc-8cce4",
+            storageBucket:     "plataforma-tcc-8cce4.firebasestorage.app",
+            messagingSenderId: "914806367241",
+            appId:             "1:914806367241:web:f46f3af9ae33a407c2c4d8",
+            measurementId:     "G-M1WEBY5FCD"
+        };
+
+        const app       = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth      = getAuth(app);
+
+        // Expõe Auth e todas as funções necessárias para o TCC.js
+        window._firebaseAuth                    = auth;
+        window._GoogleAuthProvider              = GoogleAuthProvider;
+        window._GithubAuthProvider              = GithubAuthProvider;
+        window._OAuthProvider                   = OAuthProvider;
+        window._firebaseSignInWithPopup         = signInWithPopup;
+        window._firebaseSignInEmail             = signInWithEmailAndPassword;
+        window._firebaseCreateUser              = createUserWithEmailAndPassword;
+        window._firebaseSendPasswordReset       = sendPasswordResetEmail;
+        window._firebaseUpdateProfile           = updateProfile;
+        window._firebaseSignOut                 = signOut;
+        window._firebaseLinkWithPopup           = linkWithPopup;
+        window._firebaseUnlink                  = unlink;
+        window._firebaseOnAuthStateChanged      = onAuthStateChanged;
+
+        // Inicia listeners após o TCC.js carregar
+        if (typeof iniciarListenerAuth === 'function') {
+            iniciarListenerAuth();
+        } else {
+            window.addEventListener('tcc-js-ready', () => iniciarListenerAuth());
+        }
+    </script>
     
     <script src="TCC.js"></script>
 
