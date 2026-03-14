@@ -1590,3 +1590,558 @@ document.addEventListener('DOMContentLoaded', () => {
 
     console.log('%c🌾 ENEM 2026 — Seek souls. Larger, more powerful souls.', 'color:#888;font-weight:bold;font-size:14px;');
 });
+
+// =============================================================================
+//  MÓDULO PERFIL & DESEMPENHO + AUTH COMPLETO — integrado ao TCC.js
+// =============================================================================
+
+// ── CONFIGURAÇÃO DOS PROVEDORES ───────────────────────────────────────────────
+const PROVEDORES_CONFIG = {
+    'google.com': {
+        nome: 'Google',       statusId: 'status-google',
+        btnId: 'btn-google',  itemId: 'metodo-google',
+        getProvider: () => new window._GoogleAuthProvider()
+    },
+    'password': {
+        nome: 'E-mail e Senha', statusId: 'status-password',
+        btnId: 'btn-password',  itemId: 'metodo-password',
+        getProvider: null
+    },
+    'apple.com': {
+        nome: 'Apple ID',     statusId: 'status-apple',
+        btnId: 'btn-apple',   itemId: 'metodo-apple',
+        getProvider: () => new window._OAuthProvider('apple.com')
+    },
+    'github.com': {
+        nome: 'GitHub',       statusId: 'status-github',
+        btnId: 'btn-github',  itemId: 'metodo-github',
+        getProvider: () => new window._GithubAuthProvider()
+    }
+};
+
+// ── UTILITÁRIOS ───────────────────────────────────────────────────────────────
+function _setTxt(id, val) {
+    const e = document.getElementById(id);
+    if (e) e.textContent = val;
+}
+function _formatarData(data) {
+    if (!data) return '—';
+    const d = (data instanceof Date) ? data : new Date(data);
+    if (isNaN(d.getTime())) return '—';
+    return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+}
+function _formatarRelativa(data) {
+    if (!data) return '—';
+    const d    = (data instanceof Date) ? data : new Date(data);
+    const diff = Date.now() - d.getTime();
+    if (isNaN(diff)) return '—';
+    const min  = Math.floor(diff / 60000);
+    const h    = Math.floor(diff / 3600000);
+    const dias = Math.floor(diff / 86400000);
+    if (min < 1)    return 'Agora mesmo';
+    if (min < 60)   return `há ${min} minuto${min > 1 ? 's' : ''}`;
+    if (h < 24)     return `há ${h} hora${h > 1 ? 's' : ''}`;
+    if (dias === 1) return 'ontem';
+    if (dias < 7)   return `há ${dias} dias`;
+    return _formatarData(d);
+}
+function _iniciais(nome) {
+    if (!nome) return '?';
+    const p = nome.trim().split(/\s+/);
+    return p.length === 1
+        ? p[0][0].toUpperCase()
+        : (p[0][0] + p[p.length - 1][0]).toUpperCase();
+}
+function _mostrarAlertaModal(msg) {
+    const el = document.getElementById('modal-alerta');
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.remove('hidden');
+}
+function _limparAlertaModal() {
+    const el = document.getElementById('modal-alerta');
+    if (el) { el.textContent = ''; el.classList.add('hidden'); }
+}
+function _setBtnLoading(id, loading, textoOriginal) {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    btn.disabled    = loading;
+    btn.textContent = loading ? 'Aguarde...' : textoOriginal;
+}
+
+// ── MODAL: ABRIR / FECHAR ─────────────────────────────────────────────────────
+function toggleModalPerfil() {
+    const modal   = document.getElementById('perfil-modal');
+    const overlay = document.getElementById('perfil-modal-overlay');
+    if (!modal) return;
+    const estaOculto = modal.classList.contains('hidden');
+    if (estaOculto) {
+        overlay.classList.remove('hidden');
+        modal.classList.remove('hidden');
+        modal.setAttribute('aria-hidden', 'false');
+        const auth = window._firebaseAuth;
+        if (auth?.currentUser) _atualizarMiniPerfil(auth.currentUser);
+    } else {
+        fecharModalPerfil();
+    }
+}
+function fecharModalPerfil() {
+    const overlay = document.getElementById('perfil-modal-overlay');
+    const modal   = document.getElementById('perfil-modal');
+    overlay?.classList.add('hidden');
+    modal?.classList.add('hidden');
+    modal?.setAttribute('aria-hidden', 'true');
+    _limparAlertaModal();
+}
+// Fecha com ESC
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') fecharModalPerfil();
+});
+// Fecha ao clicar fora do modal
+document.addEventListener('click', e => {
+    const overlay = document.getElementById('perfil-modal-overlay');
+    const modal   = document.getElementById('perfil-modal');
+    const btnNav  = document.getElementById('btn-perfil-nav');
+    if (!overlay || overlay.classList.contains('hidden')) return;
+    if (modal && !modal.contains(e.target) && btnNav && !btnNav.contains(e.target)) {
+        fecharModalPerfil();
+    }
+});
+
+// ── MODAL: NAVEGAÇÃO ENTRE FORMULÁRIOS ───────────────────────────────────────
+function mostrarLogin() {
+    document.getElementById('modal-form-email')?.classList.remove('hidden');
+    document.getElementById('modal-form-cadastro')?.classList.add('hidden');
+    document.getElementById('modal-form-esqueci')?.classList.add('hidden');
+    _limparAlertaModal();
+    const titulo = document.getElementById('modal-titulo');
+    if (titulo) titulo.textContent = 'Entrar na plataforma';
+}
+function mostrarCadastro() {
+    document.getElementById('modal-form-email')?.classList.add('hidden');
+    document.getElementById('modal-form-cadastro')?.classList.remove('hidden');
+    document.getElementById('modal-form-esqueci')?.classList.add('hidden');
+    _limparAlertaModal();
+    const titulo = document.getElementById('modal-titulo');
+    if (titulo) titulo.textContent = 'Criar conta';
+}
+function mostrarEsqueciSenha() {
+    document.getElementById('modal-form-email')?.classList.add('hidden');
+    document.getElementById('modal-form-cadastro')?.classList.add('hidden');
+    document.getElementById('modal-form-esqueci')?.classList.remove('hidden');
+    _limparAlertaModal();
+    const titulo = document.getElementById('modal-titulo');
+    if (titulo) titulo.textContent = 'Recuperar senha';
+}
+
+// ── MODAL: TOGGLE SENHA VISÍVEL ───────────────────────────────────────────────
+function toggleSenhaVisivel() {
+    const campo = document.getElementById('modal-senha');
+    if (!campo) return;
+    campo.type = campo.type === 'password' ? 'text' : 'password';
+}
+
+// ── MENSAGENS DE ERRO FIREBASE ────────────────────────────────────────────────
+const _errosFirebase = {
+    'auth/user-not-found':          'Nenhuma conta encontrada com este e-mail.',
+    'auth/wrong-password':          'Senha incorreta. Verifique e tente novamente.',
+    'auth/invalid-email':           'E-mail inválido. Verifique o formato.',
+    'auth/email-already-in-use':    'Este e-mail já está cadastrado.',
+    'auth/weak-password':           'Senha fraca. Use pelo menos 6 caracteres.',
+    'auth/popup-closed-by-user':    'Login cancelado. Feche a janela e tente novamente.',
+    'auth/popup-blocked':           'Pop-up bloqueado. Permita pop-ups para este site.',
+    'auth/too-many-requests':       'Muitas tentativas. Aguarde alguns minutos.',
+    'auth/network-request-failed':  'Erro de rede. Verifique sua conexão.',
+    'auth/invalid-credential':      'Credenciais inválidas. Verifique e-mail e senha.',
+    'auth/requires-recent-login':   'Por segurança, faça login novamente.',
+};
+function _mensagemErro(err) {
+    return _errosFirebase[err.code] || `Erro inesperado: ${err.message}`;
+}
+
+// ── AÇÕES DE AUTH ─────────────────────────────────────────────────────────────
+
+// Login com Google
+async function loginComGoogle() {
+    const auth = window._firebaseAuth;
+    if (!auth) return;
+    const btn = document.getElementById('btn-login-google');
+    if (btn) { btn.disabled = true; btn.textContent = 'Aguarde...'; }
+    _limparAlertaModal();
+    try {
+        const provider = new window._GoogleAuthProvider();
+        await window._firebaseSignInWithPopup(auth, provider);
+        fecharModalPerfil();
+        notificar('✅ Login com Google realizado com sucesso!', 'success');
+    } catch (err) {
+        _mostrarAlertaModal(_mensagemErro(err));
+    } finally {
+        if (btn) { btn.disabled = false; btn.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Continuar com Google`; }
+    }
+}
+
+// Login com E-mail e Senha
+async function loginComEmail() {
+    const auth   = window._firebaseAuth;
+    const email  = document.getElementById('modal-email')?.value?.trim();
+    const senha  = document.getElementById('modal-senha')?.value;
+    if (!email || !senha) { _mostrarAlertaModal('Preencha e-mail e senha.'); return; }
+    _limparAlertaModal();
+    _setBtnLoading('btn-login-email', true, 'Entrar');
+    try {
+        await window._firebaseSignInEmail(auth, email, senha);
+        fecharModalPerfil();
+        notificar('✅ Login realizado com sucesso!', 'success');
+    } catch (err) {
+        _mostrarAlertaModal(_mensagemErro(err));
+    } finally {
+        _setBtnLoading('btn-login-email', false, 'Entrar');
+    }
+}
+
+// Cadastro com E-mail e Senha
+async function cadastrarEmail() {
+    const auth  = window._firebaseAuth;
+    const nome  = document.getElementById('modal-nome')?.value?.trim();
+    const email = document.getElementById('modal-email-cad')?.value?.trim();
+    const senha = document.getElementById('modal-senha-cad')?.value;
+    if (!nome || !email || !senha) { _mostrarAlertaModal('Preencha todos os campos.'); return; }
+    if (senha.length < 6) { _mostrarAlertaModal('A senha deve ter pelo menos 6 caracteres.'); return; }
+    _limparAlertaModal();
+    _setBtnLoading('btn-cadastrar', true, 'Criar Conta');
+    try {
+        const cred = await window._firebaseCreateUser(auth, email, senha);
+        await window._firebaseUpdateProfile(cred.user, { displayName: nome });
+        fecharModalPerfil();
+        notificar(`🎉 Bem-vindo, ${nome}! Conta criada com sucesso!`, 'success');
+    } catch (err) {
+        _mostrarAlertaModal(_mensagemErro(err));
+    } finally {
+        _setBtnLoading('btn-cadastrar', false, 'Criar Conta');
+    }
+}
+
+// Recuperação de senha
+async function enviarResetSenha() {
+    const auth  = window._firebaseAuth;
+    const email = document.getElementById('modal-email-reset')?.value?.trim();
+    if (!email) { _mostrarAlertaModal('Informe seu e-mail.'); return; }
+    _limparAlertaModal();
+    try {
+        await window._firebaseSendPasswordReset(auth, email);
+        notificar('📧 E-mail de recuperação enviado! Verifique sua caixa.', 'success');
+        mostrarLogin();
+        fecharModalPerfil();
+    } catch (err) {
+        _mostrarAlertaModal(_mensagemErro(err));
+    }
+}
+
+// Logout
+async function fazerLogout() {
+    const auth = window._firebaseAuth;
+    if (!auth) return;
+    try {
+        await window._firebaseSignOut(auth);
+        fecharModalPerfil();
+        notificar('👋 Você saiu da sua conta.', 'info');
+    } catch (err) {
+        notificar('Erro ao sair: ' + err.message, 'error');
+    }
+}
+
+// ── NAVBAR: ATUALIZA AVATAR ───────────────────────────────────────────────────
+function _atualizarNavbarAvatar(user) {
+    const iconEl  = document.getElementById('navbar-avatar-icon');
+    const fotoEl  = document.getElementById('navbar-avatar-foto');
+    const dotEl   = document.getElementById('navbar-perfil-dot');
+    if (!iconEl || !fotoEl || !dotEl) return;
+
+    if (user?.photoURL) {
+        fotoEl.src = user.photoURL;
+        fotoEl.classList.remove('hidden');
+        iconEl.style.display = 'none';
+    } else if (user) {
+        // Sem foto: ícone colorido
+        fotoEl.classList.add('hidden');
+        iconEl.style.display = '';
+        iconEl.style.color   = 'var(--primary)';
+    } else {
+        // Deslogado: ícone padrão muted
+        fotoEl.classList.add('hidden');
+        iconEl.style.display = '';
+        iconEl.style.color   = '';
+    }
+
+    // Ponto verde de "online"
+    if (user) dotEl.classList.remove('hidden');
+    else       dotEl.classList.add('hidden');
+}
+
+// ── MINI-PERFIL NO MODAL (painel logado) ─────────────────────────────────────
+function _atualizarMiniPerfil(user) {
+    if (!user) return;
+    const nome = user.displayName || 'Usuário';
+
+    // Avatar
+    const avatarEl = document.getElementById('modal-mini-avatar');
+    const fotoEl   = document.getElementById('modal-mini-foto');
+    const inEl     = document.getElementById('modal-mini-iniciais');
+    if (avatarEl) {
+        if (user.photoURL && fotoEl) {
+            fotoEl.src = user.photoURL;
+            fotoEl.classList.remove('hidden');
+            if (inEl) inEl.textContent = '';
+        } else if (inEl) {
+            inEl.textContent = _iniciais(nome);
+            if (fotoEl) fotoEl.classList.add('hidden');
+        }
+    }
+
+    _setTxt('modal-mini-nome', nome);
+    _setTxt('modal-mini-email', user.email || '—');
+
+    const nivel    = STATE.nivel ?? 1;
+    const nivelInf = NIVEIS[nivel];
+    _setTxt('modal-mini-nivel', nivelInf ? nivelInf.titulo : `Nível ${nivel}`);
+
+    // Stats rápidos
+    const xpNivel = typeof XP_POR_NIVEL !== 'undefined' ? XP_POR_NIVEL : 100;
+    const xpAcum  = ((nivel - 1) * xpNivel) + (STATE.xp ?? 0);
+    _setTxt('mstat-xp',        xpAcum.toLocaleString('pt-BR'));
+    _setTxt('mstat-redacoes',  (STATE.historico?.length ?? 0).toLocaleString('pt-BR'));
+    _setTxt('mstat-sequencia', (STATE.sequencia ?? 0).toLocaleString('pt-BR'));
+}
+
+// ── RENDERIZAÇÃO PAINEL PERFIL COMPLETO ───────────────────────────────────────
+function renderizarPerfilUsuario(user) {
+    const skeleton  = document.getElementById('perfil-skeleton');
+    const conteudo  = document.getElementById('perfil-usuario-conteudo');
+    const naoLogado = document.getElementById('perfil-nao-logado');
+    if (!conteudo) return;
+
+    if (!user) {
+        skeleton?.classList.add('hidden');
+        conteudo.classList.add('hidden');
+        naoLogado?.classList.remove('hidden');
+        return;
+    }
+    const foto     = document.getElementById('perfil-foto');
+    const iniciais = document.getElementById('perfil-iniciais');
+    const nome     = user.displayName || 'Usuário';
+
+    if (user.photoURL && foto) {
+        foto.src = user.photoURL; foto.alt = `Foto de ${nome}`;
+        foto.classList.remove('hidden');
+        iniciais?.classList.add('hidden');
+    } else if (iniciais) {
+        iniciais.textContent = _iniciais(nome);
+        iniciais.classList.remove('hidden');
+        foto?.classList.add('hidden');
+    }
+
+    _setTxt('perfil-nome', nome);
+    _setTxt('perfil-email', user.email || 'Sem e-mail');
+    _setTxt('perfil-criacao', _formatarData(user.metadata?.creationTime));
+    _setTxt('perfil-ultimo-acesso', _formatarRelativa(user.metadata?.lastSignInTime));
+
+    const nivel    = STATE.nivel ?? 1;
+    const nivelInf = NIVEIS[nivel];
+    _setTxt('perfil-titulo-nivel', nivelInf ? nivelInf.titulo : `Nível ${nivel}`);
+    _setTxt('perfil-nivel-badge',  String(nivel));
+
+    skeleton?.classList.add('hidden');
+    naoLogado?.classList.add('hidden');
+    conteudo.classList.remove('hidden');
+}
+
+// ── RENDERIZAÇÃO MÉTODOS DE LOGIN ─────────────────────────────────────────────
+function renderizarMetodosLogin(user) {
+    const vinc = user ? user.providerData.map(p => p.providerId) : [];
+    Object.entries(PROVEDORES_CONFIG).forEach(([pid, cfg]) => {
+        const ok     = vinc.includes(pid);
+        const itemEl = document.getElementById(cfg.itemId);
+        const stEl   = document.getElementById(cfg.statusId);
+        const btnEl  = document.getElementById(cfg.btnId);
+        if (!itemEl || !stEl || !btnEl) return;
+        if (ok) {
+            itemEl.classList.add('conectado');
+            stEl.textContent  = '✓ Conectado';
+            stEl.className    = 'login-metodo-status status-on';
+            btnEl.textContent = 'Desconectar';
+            btnEl.className   = 'login-metodo-btn btn-desconectar';
+        } else {
+            itemEl.classList.remove('conectado');
+            stEl.textContent  = 'Não conectado';
+            stEl.className    = 'login-metodo-status status-off';
+            btnEl.textContent = 'Conectar';
+            btnEl.className   = 'login-metodo-btn btn-conectar';
+        }
+        btnEl.disabled = pid === 'password' || !user;
+        if (pid === 'password') btnEl.title = 'Gerencie e-mail e senha nas configurações da conta';
+    });
+}
+
+// ── CONECTAR / DESCONECTAR PROVEDOR ──────────────────────────────────────────
+async function alternarProvedorLogin(providerId) {
+    const auth = window._firebaseAuth;
+    if (!auth?.currentUser) { notificar('Você precisa estar logado.', 'warning'); return; }
+    const user = auth.currentUser;
+    const cfg  = PROVEDORES_CONFIG[providerId];
+    if (!cfg?.getProvider) return;
+    const vinc  = user.providerData.map(p => p.providerId);
+    const ok    = vinc.includes(providerId);
+    const btnEl = document.getElementById(cfg.btnId);
+    if (btnEl) { btnEl.disabled = true; btnEl.textContent = '...'; }
+    try {
+        if (ok) {
+            if (vinc.length <= 1) { notificar('Mantenha ao menos um método ativo.', 'error'); return; }
+            await window._firebaseUnlink(user, providerId);
+            notificar(`${cfg.nome} desconectado.`, 'success');
+        } else {
+            await window._firebaseLinkWithPopup(user, cfg.getProvider());
+            notificar(`${cfg.nome} conectado!`, 'success');
+        }
+        renderizarMetodosLogin(auth.currentUser);
+    } catch (err) {
+        const msgs = {
+            'auth/popup-closed-by-user': 'Janela fechada. Tente novamente.',
+            'auth/popup-blocked':        'Pop-up bloqueado pelo navegador.',
+            'auth/credential-already-in-use': 'Conta já vinculada a outro usuário.',
+            'auth/provider-already-linked':   `${cfg.nome} já está conectado.`,
+        };
+        notificar(msgs[err.code] || `Erro: ${err.message}`, 'error');
+        renderizarMetodosLogin(auth.currentUser);
+    }
+}
+
+// ── DESEMPENHO ────────────────────────────────────────────────────────────────
+function renderizarDesempenho() {
+    const nivel     = STATE.nivel    ?? 1;
+    const xp        = STATE.xp       ?? 0;
+    const sequencia = STATE.sequencia ?? 0;
+    const historico = STATE.historico ?? [];
+
+    const totalAcertos  = parseInt(document.getElementById('total-acertos')?.textContent)  || 0;
+    const totalRedacoes = parseInt(document.getElementById('total-redacoes')?.textContent) || 0;
+    const xpNivel       = typeof XP_POR_NIVEL !== 'undefined' ? XP_POR_NIVEL : 100;
+    const xpAcumulado   = ((nivel - 1) * xpNivel) + xp;
+
+    _setTxt('stat-pontuacao',  xpAcumulado.toLocaleString('pt-BR'));
+    _setTxt('stat-redacoes',   totalRedacoes.toLocaleString('pt-BR'));
+    _setTxt('stat-acertos',    totalAcertos.toLocaleString('pt-BR'));
+    _setTxt('stat-sequencia',  sequencia.toLocaleString('pt-BR'));
+    _setTxt('stat-nivel',      String(nivel));
+    _setTxt('stat-xp',         xp.toLocaleString('pt-BR'));
+    _setTxt('perfil-nivel-badge', String(nivel));
+
+    const pct   = Math.min(100, Math.round((xp / xpNivel) * 100)) || 0;
+    const barra = document.getElementById('barra-progresso');
+    const cont  = document.getElementById('barra-progresso-container');
+    if (barra) barra.style.width = `${pct}%`;
+    if (cont)  cont.setAttribute('aria-valuenow', String(pct));
+    _setTxt('progresso-pct', `${pct}%`);
+
+    const msgs = [
+        { min: 75, msg: 'Quase lá! Você está muito próximo de subir de nível.' },
+        { min: 50, msg: 'Mais da metade do caminho! Continue praticando.' },
+        { min: 25, msg: 'Ótimo começo! Você já passou de 25% do próximo nível.' },
+        { min: 0,  msg: 'Continue praticando para subir de nível!' },
+    ];
+    _setTxt('progresso-desc', (msgs.find(m => pct >= m.min) ?? msgs[msgs.length - 1]).msg);
+
+    const ult = historico[historico.length - 1];
+    _setTxt('stat-ultima-atividade', ult ? (ult.descricao || ult.tema || 'Atividade registrada') : 'Nenhuma atividade ainda');
+
+    _renderizarHistoricoPerfil(historico);
+}
+
+function _renderizarHistoricoPerfil(historico) {
+    const lista = document.getElementById('historico-lista-perfil');
+    const vazio = document.getElementById('historico-vazio-perfil');
+    if (!lista) return;
+    if (!historico?.length) { vazio?.classList.remove('hidden'); return; }
+    vazio?.classList.add('hidden');
+    lista.querySelectorAll('.historico-item').forEach(e => e.remove());
+    const icones = { cacador: '🎯', multipla: '📋', digitacao: '⌨️' };
+    [...historico].reverse().slice(0, 10).forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'historico-item';
+        div.role = 'listitem';
+        div.style.animationDelay = `${i * 40}ms`;
+        div.innerHTML = `
+            <span class="historico-item-icone" aria-hidden="true">${icones[item.modo] ?? '📝'}</span>
+            <span class="historico-item-descricao">${item.descricao || item.tema || 'Redação praticada'}</span>
+            ${item.data ? `<span class="historico-item-detalhe">${_formatarRelativa(item.data)}</span>` : ''}
+            ${item.xpGanho ? `<span class="historico-item-xp">+${item.xpGanho} XP</span>` : ''}
+        `;
+        lista.appendChild(div);
+    });
+}
+
+// ── MODAL: MOSTRAR PAINEL CORRETO (logado / não logado) ───────────────────────
+function _atualizarModalPaineis(user) {
+    const pLogin  = document.getElementById('modal-painel-login');
+    const pPerfil = document.getElementById('modal-painel-perfil');
+    if (!pLogin || !pPerfil) return;
+    if (user) {
+        pLogin.classList.add('hidden');
+        pPerfil.classList.remove('hidden');
+        _atualizarMiniPerfil(user);
+    } else {
+        pPerfil.classList.add('hidden');
+        pLogin.classList.remove('hidden');
+        mostrarLogin();
+    }
+}
+
+// ── LISTENER DE AUTH STATE ────────────────────────────────────────────────────
+function iniciarListenerAuth() {
+    const auth = window._firebaseAuth;
+    if (!auth || typeof window._firebaseOnAuthStateChanged !== 'function') {
+        renderizarPerfilUsuario(null);
+        renderizarMetodosLogin(null);
+        _atualizarNavbarAvatar(null);
+        _atualizarModalPaineis(null);
+        renderizarDesempenho();
+        return;
+    }
+    window._firebaseOnAuthStateChanged(auth, (user) => {
+        _atualizarNavbarAvatar(user);
+        _atualizarModalPaineis(user);
+        renderizarPerfilUsuario(user);
+        renderizarMetodosLogin(user);
+        renderizarDesempenho();
+    });
+}
+
+// ── HOOK: atualiza perfil ao abrir aba ────────────────────────────────────────
+(function hookAtivarAba() {
+    const _orig = window.ativarAba;
+    if (typeof _orig !== 'function') return;
+    window.ativarAba = function(aba) {
+        _orig(aba);
+        if (aba === 'perfil') {
+            renderizarDesempenho();
+            const u = window._firebaseAuth?.currentUser;
+            if (u) { renderizarPerfilUsuario(u); renderizarMetodosLogin(u); }
+        }
+    };
+})();
+
+// ── EXPÕE GLOBAIS ─────────────────────────────────────────────────────────────
+window.toggleModalPerfil     = toggleModalPerfil;
+window.fecharModalPerfil     = fecharModalPerfil;
+window.mostrarLogin          = mostrarLogin;
+window.mostrarCadastro       = mostrarCadastro;
+window.mostrarEsqueciSenha   = mostrarEsqueciSenha;
+window.toggleSenhaVisivel    = toggleSenhaVisivel;
+window.loginComGoogle        = loginComGoogle;
+window.loginComEmail         = loginComEmail;
+window.cadastrarEmail        = cadastrarEmail;
+window.enviarResetSenha      = enviarResetSenha;
+window.fazerLogout           = fazerLogout;
+window.alternarProvedorLogin = alternarProvedorLogin;
+window.iniciarListenerAuth   = iniciarListenerAuth;
+
+window.dispatchEvent(new Event('tcc-js-ready'));
