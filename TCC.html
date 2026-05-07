@@ -1,1456 +1,260 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#09090b">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="description" content="Plataforma interativa de preparação para redação do ENEM 2026. Pratique identificação de erros, aprenda com feedback detalhado e alcance a nota 1000!">
-    <meta name="keywords" content="ENEM, redação, preparação, nota 1000, gramática, português, vestibular">
-    <meta name="author" content="Plataforma ENEM 2026">
-    <title>🌾 Redação ENEM 2026 - Sua Jornada para a Nota 1000</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050505" />
+  <meta name="description" content="NeonFall — Experience the next evolution of gaming. Download now." />
+  <title>NeonFall — Download</title>
+  <link rel="stylesheet" href="TCC.CSS">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="TCC.CSS">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <header class="main-navbar" id="main-navbar" role="banner">
-        <div class="navbar-inner">
-            <button class="navbar-menu-btn" id="btn-open-menu" onclick="abrirMenu()" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="nav-drawer">
-                <span class="menu-icon-bars" aria-hidden="true">
-                    <span class="menu-icon-bar"></span>
-                    <span class="menu-icon-bar"></span>
-                </span>
-                <span class="menu-label">Menu</span>
-            </button>
-            <div></div>
-            <div class="navbar-actions">
-                <button class="navbar-icon-btn" id="btn-search-toggle" onclick="toggleBusca()" aria-label="Buscar" title="Buscar na plataforma">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"/>
-                        <path d="m21 21-4.35-4.35"/>
-                    </svg>
-                </button>
 
-                <!-- Botão de Perfil/Login -->
-                <button class="navbar-icon-btn navbar-perfil-btn" id="btn-perfil-nav"
-                        onclick="toggleModalPerfil()"
-                        aria-label="Meu perfil" title="Meu Perfil">
-                    <!-- Avatar compacto (foto ou ícone padrão) -->
-                    <span class="navbar-avatar" id="navbar-avatar">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
-                             stroke-linecap="round" stroke-linejoin="round" width="20" height="20" id="navbar-avatar-icon">
-                            <circle cx="12" cy="8" r="4"/>
-                            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
-                        </svg>
-                        <img id="navbar-avatar-foto" src="" alt="" class="navbar-avatar-img hidden"/>
-                    </span>
-                    <span class="navbar-perfil-dot hidden" id="navbar-perfil-dot" title="Logado"></span>
-                </button>
-
-                <button class="navbar-cta-btn" onclick="ativarAba('pratica')" aria-label="Praticar agora">
-                    🌾 Praticar Agora
-                </button>
-            </div>
-
-        </div>
-        <div class="navbar-search-bar" id="navbar-search-bar" aria-hidden="true">
-            <div class="search-bar-inner">
-                <svg class="search-bar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" preserveAspectRatio="xMidYMid meet">
-                    <circle cx="11" cy="11" r="8"/>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                </svg>
-                <input type="search" id="search-input" class="search-bar-input" placeholder="Buscar competência, tema, dica..." autocomplete="off" aria-label="Campo de busca"/>
-                <button class="search-bar-close" onclick="toggleBusca()" aria-label="Fechar busca">✕</button>
-            </div>
-            <div class="search-results" id="search-results" role="list" aria-label="Resultados da busca"></div>
-        </div>
-    </header>
-    <!-- MENU DRAWER (lateral)                 -->
-    <div class="nav-drawer-overlay" id="nav-drawer-overlay" onclick="fecharMenu()" aria-hidden="true"></div>
-
-    <nav class="nav-drawer" id="nav-drawer" role="dialog" aria-label="Menu de navegação" aria-modal="true" aria-hidden="true">
-        <div class="nav-drawer-inner">
-
-            <button class="nav-drawer-close" onclick="fecharMenu()" aria-label="Fechar menu">
-                <span class="close-x">✕</span>
-                <span class="close-label">Fechar</span>
-            </button>
-
-            <ul class="nav-drawer-list" role="tablist">
-                <li>
-                    <button class="nav-drawer-item active" data-tab="inicio" role="tab" aria-selected="true" onclick="ativarAba('inicio'); fecharMenu()">
-                        Início
-                    </button>
-                </li>
-                <li>
-                    <button class="nav-drawer-item" data-tab="competencias" role="tab" aria-selected="false" onclick="ativarAba('competencias'); fecharMenu()">
-                        Competências
-                    </button>
-                </li>
-                <li>
-                    <button class="nav-drawer-item" data-tab="dicas" role="tab" aria-selected="false" onclick="ativarAba('dicas'); fecharMenu()">
-                        Dicas &amp; Conectivos
-                    </button>
-                </li>
-                <li>
-                    <button class="nav-drawer-item" data-tab="temas" role="tab" aria-selected="false" onclick="ativarAba('temas'); fecharMenu()">
-                        Temas
-                    </button>
-                </li>
-                <li class="nav-drawer-divider" aria-hidden="true"></li>
-                <li>
-                    <button class="nav-drawer-item" data-tab="acessibilidade" role="tab" aria-selected="false" onclick="ativarAba('acessibilidade'); fecharMenu()">
-                        Acessibilidade
-                    </button>
-                </li>
-            </ul>
-
-        </div>
-    </nav>
-    <main class="container" role="main">
-        <div id="panel-inicio" class="tab-panel active" role="tabpanel" aria-labelledby="tab-inicio">
-
-            <header class="page-header">
-                <h1 class="main-title fade-in">
-                    <span class="title-icon">✨</span>
-                    Plataforma ENEM 2026
-                    <span class="title-subtitle">Sua Jornada para a Redação Nota 1000</span>
-                </h1>
-
-                <div class="status-gamificacao fade-in" id="status-gamificacao">
-                    <div class="nivel-card">
-                        <div class="nivel-icone" id="nivel-icone">🌱</div>
-                        <div class="nivel-info">
-                            <span class="nivel-label">Nível</span>
-                            <span class="nivel-numero" id="nivel-numero">1</span>
-                            <span class="nivel-titulo" id="nivel-titulo">Aprendiz</span>
-                        </div>
-                    </div>
-
-                    <div class="xp-card">
-                        <div class="xp-info">
-                            <span class="xp-label">Experiência</span>
-                            <div class="xp-numeros">
-                                <span id="xp-atual">0</span>
-                                <span class="xp-separador">/</span>
-                                <span id="xp-total">100</span>
-                                <span class="xp-label-small">XP</span>
-                            </div>
-                        </div>
-                        <div class="xp-barra-container">
-                            <div class="xp-barra" id="xp-barra"></div>
-                        </div>
-                    </div>
-
-                    <div class="stats-card">
-                        <div class="stat-item">
-                            <span class="stat-icon">🎯</span>
-                            <span class="stat-label">Redações</span>
-                            <span class="stat-value" id="total-redacoes">0</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-icon">⭐</span>
-                            <span class="stat-label">Acertos</span>
-                            <span class="stat-value" id="total-acertos">0</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-icon">🔥</span>
-                            <span class="stat-label">Sequência</span>
-                            <span class="stat-value" id="sequencia-atual">0</span>
-                        </div>
-                    </div>
-                </div>
-            </header>
-
-            <section class="section-intro fade-in">
-                <div class="card card-destaque">
-                    <div class="card-header">
-                        <h2 class="card-title">
-                            <span class="icon">📝</span>
-                            A Importância da Redação no ENEM
-                        </h2>
-                    </div>
-                    <div class="card-body">
-                        <p class="text-lead">
-                            A redação do ENEM é uma das provas mais importantes e decisivas do exame!
-                            Ela pode representar até <strong>20% da sua nota final</strong> em cursos concorridos
-                            e é fator de desempate em diversas situações.
-                        </p>
-                        <p>
-                            Dominar a norma culta da língua portuguesa, construir argumentos sólidos com repertório
-                            sociocultural, garantir a coesão textual e elaborar uma proposta de intervenção completa
-                            são habilidades essenciais para conquistar a tão sonhada <strong class="highlight">nota 1000</strong>! 🌱
-                        </p>
-                        <p>
-                            <strong>Por que treinar com nossa plataforma?</strong> Aqui você pratica identificação
-                            de erros em textos reais, desenvolve olhar crítico apurado e aprende com feedback
-                            detalhado e personalizado!
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            <section class="alerts-section fade-in" role="region" aria-label="Avisos importantes">
-                <div class="alert alert-success">
-                    <span class="alert-icon">✅</span>
-                    <div class="alert-content">
-                        <strong>Sucesso!</strong> A prática diária é o segredo para dominar a redação do ENEM!
-                    </div>
-                </div>
-                <div class="alert alert-warning">
-                    <span class="alert-icon">⚠️</span>
-                    <div class="alert-content">
-                        <strong>Atenção!</strong> Lembre-se: cada competência vale 200 pontos. Treine todas elas!
-                    </div>
-                </div>
-                <div class="alert alert-info">
-                    <span class="alert-icon">💡</span>
-                    <div class="alert-content">
-                        <strong>Dica:</strong> Ler redações nota 1000 e identificar erros em textos ajuda muito no aprendizado!
-                    </div>
-                </div>
-            </section>
-
-            <section class="stats-enem-section fade-in">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">
-                            <span class="icon">📈</span>
-                            Estatísticas Importantes do ENEM
-                        </h2>
-                    </div>
-                    <div class="card-body">
-                        <div class="stats-grid">
-                            <div class="stat-box">
-                                <div class="stat-number highlight-primary">1.6%</div>
-                                <p class="stat-description">dos participantes tiram nota 1000 na redação</p>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-number highlight-gold">200</div>
-                                <p class="stat-description">pontos valem cada competência da redação</p>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-number highlight-green">30</div>
-                                <p class="stat-description">linhas é o tamanho ideal da sua redação</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="tags-section fade-in">
-                <div class="card card-center">
-                    <div class="card-header">
-                        <h2 class="card-title">
-                            <span class="icon">🏆</span>
-                            Competências Trabalhadas nesta Plataforma
-                        </h2>
-                    </div>
-                    <div class="card-body">
-                        <div class="tags-cloud">
-                            <span class="tag tag-success">Gramática</span>
-                            <span class="tag tag-primary">Ortografia</span>
-                            <span class="tag tag-primary">Acentuação</span>
-                            <span class="tag tag-primary">Pontuação</span>
-                            <span class="tag tag-warning">Análise Crítica</span>
-                            <span class="tag tag-success">Concordância</span>
-                            <span class="tag tag-warning">Regência</span>
-                            <span class="tag tag-primary">Crase</span>
-                            <span class="tag tag-success">Coesão Textual</span>
-                            <span class="tag tag-warning">Argumentação</span>
-                            <span class="tag tag-info">Repertório</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <blockquote class="quote-inspiradora fade-in">
-                <p class="quote-text">
-                    "Continue nessa jornada contínua de aprendizado, prática e melhora."
-                </p>
-                <footer class="quote-footer">
-                    <span class="quote-icon">✨</span>
-                    Cada erro identificado é um passo mais próximo da nota 1000!
-                </footer>
-            </blockquote>
-
-        </div>
-        <div id="panel-competencias" class="tab-panel" role="tabpanel" aria-labelledby="tab-competencias">
-
-            <section class="competencias-section fade-in">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">
-                            <span class="icon">🎯</span>
-                            As 5 Competências da Redação ENEM
-                        </h2>
-                        <p class="card-subtitle">Cada competência vale 200 pontos - Juntas somam 1000 pontos!</p>
-                    </div>
-
-                    <div class="card-body">
-                        <div class="competencia-item">
-                            <div class="competencia-header">
-                                <span class="competencia-numero">C1</span>
-                                <h3 class="competencia-titulo">Domínio da Norma-Padrão da Língua Portuguesa</h3>
-                            </div>
-                            <p class="competencia-descricao">
-                                Avalia o domínio da língua portuguesa formal: ortografia, acentuação, pontuação,
-                                concordância verbal e nominal, regência verbal e nominal, e ausência de marcas de oralidade.
-                            </p>
-                            <div class="competencia-exemplos">
-                                <strong>Exemplos de erros:</strong> "Haviam muitos problemas" (correto: Havia),
-                                "Os alunos que eu conversei" (falta preposição: com quem)
-                            </div>
-                        </div>
-
-                        <div class="competencia-item">
-                            <div class="competencia-header">
-                                <span class="competencia-numero">C2</span>
-                                <h3 class="competencia-titulo">Compreensão da Proposta de Redação</h3>
-                            </div>
-                            <p class="competencia-descricao">
-                                Verifica se você compreendeu o tema proposto e desenvolveu o texto seguindo
-                                a estrutura dissertativo-argumentativa, utilizando os textos motivadores de forma
-                                adequada sem simplesmente copiá-los.
-                            </p>
-                            <div class="competencia-exemplos">
-                                <strong>Atenção:</strong> Fuja do tema = nota zero. Sempre desenvolva o tema central
-                                sem tangenciar ou mudar de assunto.
-                            </div>
-                        </div>
-
-                        <div class="competencia-item">
-                            <div class="competencia-header">
-                                <span class="competencia-numero">C3</span>
-                                <h3 class="competencia-titulo">Seleção e Organização de Argumentos</h3>
-                            </div>
-                            <p class="competencia-descricao">
-                                Analisa sua capacidade de selecionar, relacionar, organizar e interpretar informações,
-                                fatos, opiniões e argumentos em defesa de um ponto de vista, utilizando repertório
-                                sociocultural produtivo e legitimado.
-                            </p>
-                            <div class="competencia-exemplos">
-                                <strong>Repertório legitimado:</strong> Dados estatísticos, citações de pensadores,
-                                obras artísticas, acontecimentos históricos, estudos científicos.
-                            </div>
-                        </div>
-
-                        <div class="competencia-item">
-                            <div class="competencia-header">
-                                <span class="competencia-numero">C4</span>
-                                <h3 class="competencia-titulo">Coesão Textual</h3>
-                            </div>
-                            <p class="competencia-descricao">
-                                Avalia o uso de mecanismos linguísticos (conectivos, pronomes, sinônimos, etc.)
-                                que garantem a articulação entre as partes do texto, promovendo a progressão
-                                e o encadeamento das ideias.
-                            </p>
-                            <div class="competencia-exemplos">
-                                <strong>Conectivos essenciais:</strong> Ademais, outrossim, além disso (adição);
-                                entretanto, todavia, no entanto (oposição); portanto, logo, assim (conclusão).
-                            </div>
-                        </div>
-
-                        <div class="competencia-item">
-                            <div class="competencia-header">
-                                <span class="competencia-numero">C5</span>
-                                <h3 class="competencia-titulo">Proposta de Intervenção</h3>
-                            </div>
-                            <p class="competencia-descricao">
-                                Verifica se você elaborou uma proposta de solução para o problema abordado,
-                                respeitando os direitos humanos e apresentando os 5 elementos completos.
-                            </p>
-                            <div class="competencia-exemplos">
-                                <strong>5 Elementos obrigatórios:</strong> Ação (o quê fazer), Agente (quem fará),
-                                Modo/Meio (como fazer), Efeito/Finalidade (para quê), Detalhamento (aprofundamento de um elemento).
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-        </div>
-        <div id="panel-dicas" class="tab-panel" role="tabpanel" aria-labelledby="tab-dicas">
-
-            <section class="dicas-section fade-in">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">
-                            <span class="icon">💡</span>
-                            Dicas de Ouro para a Redação Nota 1000
-                        </h2>
-                    </div>
-                    <div class="card-body">
-                        <ol class="dicas-lista">
-                            <li><strong>Leia muito:</strong> Artigos de opinião, editoriais de jornais renomados, redações nota 1000 do ENEM de anos anteriores e textos de referência.</li>
-                            <li><strong>Pratique a estrutura:</strong> Introdução com contextualização e tese, dois desenvolvimentos com argumentação sólida, e conclusão com proposta de intervenção completa.</li>
-                            <li><strong>Use repertório legitimado:</strong> Cite dados estatísticos, pesquisas científicas, obras artísticas, acontecimentos históricos e pensadores renomados.</li>
-                            <li><strong>Conectivos são seus aliados:</strong> Use-os corretamente para dar coesão ao texto e garantir a progressão das ideias.</li>
-                            <li><strong>Proposta completa:</strong> Lembre-se dos 5 elementos obrigatórios: ação, agente, modo/meio, efeito/finalidade e detalhamento.</li>
-                            <li><strong>Revise sempre:</strong> Releia seu texto buscando erros gramaticais, problemas de coerência e coesão.</li>
-                            <li><strong>Respeite os direitos humanos:</strong> Propostas discriminatórias, preconceituosas ou que violem direitos fundamentais podem zerar sua nota!</li>
-                            <li><strong>Letra legível:</strong> Mesmo com excelente conteúdo, letra ilegível dificulta a correção e pode prejudicar sua nota.</li>
-                            <li><strong>Gerencie seu tempo:</strong> Reserve cerca de 60 minutos para a redação, distribuídos entre planejamento, escrita e revisão.</li>
-                            <li><strong>Evite clichês e senso comum:</strong> Fuja de frases feitas e argumentos superficiais. Busque profundidade e originalidade.</li>
-                        </ol>
-                    </div>
-                </div>
-            </section>
-
-            <section class="conectivos-section fade-in">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">
-                            <span class="icon">🔗</span>
-                            Conectivos Essenciais para sua Redação
-                        </h2>
-                        <p class="card-subtitle">Organize suas ideias com coesão e fluidez</p>
-                    </div>
-
-                    <div class="card-body">
-                        <div class="conectivos-categoria">
-                            <h3 class="categoria-titulo">
-                                <span class="categoria-icon">➕</span>
-                                Para Adicionar Ideias
-                            </h3>
-                            <div class="conectivos-tags">
-                                <span class="tag tag-primary">Além disso</span>
-                                <span class="tag tag-primary">Ademais</span>
-                                <span class="tag tag-primary">Outrossim</span>
-                                <span class="tag tag-primary">Não só... mas também</span>
-                                <span class="tag tag-primary">Igualmente</span>
-                                <span class="tag tag-primary">Do mesmo modo</span>
-                                <span class="tag tag-primary">Similarmente</span>
-                            </div>
-                        </div>
-
-                        <div class="conectivos-categoria">
-                            <h3 class="categoria-titulo">
-                                <span class="categoria-icon">↔️</span>
-                                Para Contrapor Ideias
-                            </h3>
-                            <div class="conectivos-tags">
-                                <span class="tag tag-warning">Entretanto</span>
-                                <span class="tag tag-warning">Todavia</span>
-                                <span class="tag tag-warning">No entanto</span>
-                                <span class="tag tag-warning">Por outro lado</span>
-                                <span class="tag tag-warning">Em contrapartida</span>
-                                <span class="tag tag-warning">Contudo</span>
-                                <span class="tag tag-warning">Conquanto</span>
-                            </div>
-                        </div>
-
-                        <div class="conectivos-categoria">
-                            <h3 class="categoria-titulo">
-                                <span class="categoria-icon">✅</span>
-                                Para Concluir
-                            </h3>
-                            <div class="conectivos-tags">
-                                <span class="tag tag-success">Portanto</span>
-                                <span class="tag tag-success">Assim</span>
-                                <span class="tag tag-success">Destarte</span>
-                                <span class="tag tag-success">Logo</span>
-                                <span class="tag tag-success">Por conseguinte</span>
-                                <span class="tag tag-success">Em suma</span>
-                                <span class="tag tag-success">Em síntese</span>
-                            </div>
-                        </div>
-
-                        <div class="conectivos-categoria">
-                            <h3 class="categoria-titulo">
-                                <span class="categoria-icon">📌</span>
-                                Para Exemplificar
-                            </h3>
-                            <div class="conectivos-tags">
-                                <span class="tag tag-info">Por exemplo</span>
-                                <span class="tag tag-info">Como</span>
-                                <span class="tag tag-info">Tal como</span>
-                                <span class="tag tag-info">A saber</span>
-                                <span class="tag tag-info">Nesse sentido</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-        </div>
-        <div id="panel-temas" class="tab-panel" role="tabpanel" aria-labelledby="tab-temas">
-
-            <section class="temas-section fade-in">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">
-                            <span class="icon">🎲</span>
-                            Temas Recorrentes no ENEM
-                        </h2>
-                        <p class="card-subtitle">Esteja preparado para os assuntos mais cobrados</p>
-                    </div>
-                    <div class="card-body">
-                        <p class="text-intro">
-                            Conheça os temas que mais aparecem nas redações do ENEM e esteja preparado
-                            com repertório sociocultural e argumentos sólidos:
-                        </p>
-                        <div class="temas-grid">
-                            <div class="tema-card">
-                                <div class="tema-icon">📚</div>
-                                <h4>Educação e Tecnologia</h4>
-                                <p>Inclusão digital, EaD, metodologias ativas</p>
-                            </div>
-                            <div class="tema-card">
-                                <div class="tema-icon">🏥</div>
-                                <h4>Saúde Pública</h4>
-                                <p>SUS, acesso a tratamentos, prevenção</p>
-                            </div>
-                            <div class="tema-card">
-                                <div class="tema-icon">🌿</div>
-                                <h4>Meio Ambiente</h4>
-                                <p>Sustentabilidade, desmatamento, mudanças climáticas</p>
-                            </div>
-                            <div class="tema-card">
-                                <div class="tema-icon">🚌</div>
-                                <h4>Mobilidade Urbana</h4>
-                                <p>Transporte público, trânsito, acessibilidade</p>
-                            </div>
-                            <div class="tema-card">
-                                <div class="tema-icon">👥</div>
-                                <h4>Direitos Humanos</h4>
-                                <p>Igualdade, inclusão, combate à discriminação</p>
-                            </div>
-                            <div class="tema-card">
-                                <div class="tema-icon">⚖️</div>
-                                <h4>Desigualdade Social</h4>
-                                <p>Distribuição de renda, pobreza, oportunidades</p>
-                            </div>
-                            <div class="tema-card">
-                                <div class="tema-icon">🛡️</div>
-                                <h4>Violência e Segurança</h4>
-                                <p>Criminalidade, violência doméstica, segurança pública</p>
-                            </div>
-                            <div class="tema-card">
-                                <div class="tema-icon">🌐</div>
-                                <h4>Internet e Democracia</h4>
-                                <p>Fake news, redes sociais, privacidade digital</p>
-                            </div>
-                            <div class="tema-card">
-                                <div class="tema-icon">🎭</div>
-                                <h4>Cultura e Identidade</h4>
-                                <p>Diversidade cultural, patrimônio, valorização</p>
-                            </div>
-                            <div class="tema-card">
-                                <div class="tema-icon">🗳️</div>
-                                <h4>Cidadania e Participação</h4>
-                                <p>Democracia, engajamento político, movimentos sociais</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-        </div>
-        <div id="panel-pratica" class="tab-panel" role="tabpanel" aria-labelledby="tab-pratica">
-
-            <section class="pratica-section fade-in" id="area-pratica">
-                <div class="card card-pratica">
-                    <div class="card-header">
-                        <h2 class="card-title">
-                            <span class="icon">🎯</span>
-                            Área de Prática
-                        </h2>
-                        <p class="card-subtitle">Escolha seu modo de treino e evolua sua escrita</p>
-                    </div>
-
-                    <div class="card-body">
-
-                        <!-- SELETOR DE MODO -->
-                        <div class="modos-pratica" style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:2rem;">
-                            <button class="acess-btn modo-btn modo-btn-ativo" data-modo="cacador"
-                                    onclick="selecionarModo('cacador')" aria-pressed="true">
-                                <span>🔍</span> Caçador de Erros
-                            </button>
-                            <button class="acess-btn modo-btn" data-modo="multipla"
-                                    onclick="selecionarModo('multipla')" aria-pressed="false">
-                                <span>📝</span> Múltipla Escolha
-                            </button>
-                            <button class="acess-btn modo-btn" data-modo="digitacao"
-                                    onclick="selecionarModo('digitacao')" aria-pressed="false">
-                                <span>⌨️</span> Digitação Corretiva
-                            </button>
-                        </div>
-
-                        <!-- MODO CAÇADOR: config -->
-                        <div id="area-config-cacador">
-                            <div class="alert alert-info" style="margin-bottom:1.5rem;">
-                                <span class="alert-icon">ℹ️</span>
-                                <div class="alert-content">
-                                    <strong>Como funciona:</strong>
-                                    <ol class="instrucoes-lista">
-                                        <li>Digite seu nome e escolha um tema (ou deixe aleatório)</li>
-                                        <li>Clique em "Gerar Redação" — o texto terá erros propositais escondidos</li>
-                                        <li>Clique nas palavras que você suspeita conter erros</li>
-                                        <li>Ao finalizar, veja sua pontuação e aprenda com o gabarito!</li>
-                                    </ol>
-                                </div>
-                            </div>
-                            <div class="pratica-config">
-                                <div class="form-group">
-                                    <label for="nome-usuario" class="form-label">
-                                        <span class="label-icon">👤</span>
-                                        Seu Nome
-                                    </label>
-                                    <input type="text" id="nome-usuario" class="form-input"
-                                           placeholder="Digite seu nome para começar" maxlength="50">
-                                </div>
-                                <div class="form-group">
-                                    <label for="tema-select" class="form-label">
-                                        <span class="label-icon">📖</span>
-                                        Escolha um Tema
-                                    </label>
-                                    <select id="tema-select" class="form-select">
-                                        <option value="aleatorio">🎲 Tema Aleatório</option>
-                                        <option value="educacao">📚 Educação e Tecnologia</option>
-                                        <option value="meio-ambiente">🌿 Meio Ambiente e Sustentabilidade</option>
-                                        <option value="saude-mental">🧠 Saúde Mental no Brasil</option>
-                                        <option value="desigualdade">⚖️ Desigualdade Social</option>
-                                        <option value="violencia">👥 Violência contra a Mulher</option>
-                                        <option value="internet">🌐 Democratização do Acesso à Internet</option>
-                                        <option value="trabalho">🤖 O Futuro do Trabalho</option>
-                                        <option value="racismo">✊🏾 Racismo Estrutural</option>
-                                    </select>
-                                </div>
-                                <div class="form-actions">
-                                    <button id="btn-gerar-redacao" class="btn btn-primary btn-large"
-                                            onclick="gerarRedacao()">
-                                        <span class="btn-icon">🌾</span>
-                                        <span class="btn-text">Gerar Redação para Análise</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- REDAÇÃO (modo caçador) -->
-                        <div id="redacao-container" class="redacao-container hidden">
-                            <div class="redacao-header">
-                                <h3 id="titulo-redacao" class="redacao-titulo"></h3>
-                                <div class="redacao-meta">
-                                    <span class="meta-item">
-                                        <span class="meta-icon">📊</span>
-                                        <span>Dificuldade: <strong id="dificuldade-redacao"></strong></span>
-                                    </span>
-                                    <span class="meta-item">
-                                        <span class="meta-icon">🎯</span>
-                                        <span>Competências: <strong id="competencias-redacao"></strong></span>
-                                    </span>
-                                </div>
-                            </div>
-                            <div id="texto-redacao" class="texto-redacao" role="region" aria-label="Texto da redação"></div>
-                            <div class="acoes-redacao">
-                                <button id="btn-finalizar" class="btn btn-success" onclick="finalizarAnalise()">
-                                    <span class="btn-icon">✅</span>
-                                    <span class="btn-text">Finalizar e Ver Resultado</span>
-                                </button>
-                                <button id="btn-reiniciar" class="btn btn-secondary" onclick="reiniciarPratica()">
-                                    <span class="btn-icon">🔄</span>
-                                    <span class="btn-text">Nova Redação</span>
-                                </button>
-                                <button id="btn-dica" class="btn btn-info" onclick="mostrarDica()">
-                                    <span class="btn-icon">💡</span>
-                                    <span class="btn-text">Mostrar Dica</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- RESULTADO (modo caçador) -->
-                        <div id="resultado-container" class="resultado-container hidden">
-                            <div class="resultado-header">
-                                <h3 class="resultado-titulo">
-                                    <span class="icon">🎓</span>
-                                    Resultado da Sua Análise
-                                </h3>
-                            </div>
-                            <div id="resultado-pontuacao" class="resultado-pontuacao"></div>
-                            <div id="resultado-detalhes" class="resultado-detalhes"></div>
-                            <div class="resultado-acoes">
-                                <button class="btn btn-primary" onclick="reiniciarPratica()">
-                                    <span class="btn-icon">🔄</span>
-                                    <span class="btn-text">Praticar Novamente</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- PAINEL MÚLTIPLA ESCOLHA -->
-                        <div id="painel-multipla" class="hidden"></div>
-
-                        <!-- PAINEL DIGITAÇÃO CORRETIVA -->
-                        <div id="painel-digitacao" class="hidden"></div>
-
-                    </div>
-                </div>
-            </section>
-
-            <!-- HISTÓRICO DE PRÁTICAS -->
-            <section class="fade-in">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">
-                            <span class="icon">📋</span>
-                            Histórico de Práticas
-                        </h2>
-                        <p class="card-subtitle">Suas últimas 5 sessões de treino</p>
-                    </div>
-                    <div class="card-body">
-                        <div id="historico-container">
-                            <p style="color:var(--text-muted);text-align:center;padding:1.5rem 0;">
-                                Nenhuma prática registrada ainda. Comece agora! 🌱
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-        </div>
-        <div id="panel-acessibilidade" class="tab-panel" role="tabpanel" aria-labelledby="tab-acessibilidade">
-
-            <section class="acess-section fade-in">
-                <div class="card card-destaque">
-                    <div class="card-header">
-                        <h2 class="card-title">
-                            <span class="icon">♿</span>
-                            Painel de Acessibilidade
-                        </h2>
-                        <p class="card-subtitle">Personalize a plataforma para sua melhor experiência</p>
-                    </div>
-
-                    <div class="card-body">
-                        <div class="acess-grupo">
-                            <div class="acess-grupo-header">
-                                <span class="acess-grupo-icon">🔤</span>
-                                <h3 class="acess-grupo-titulo">Tamanho da Fonte</h3>
-                            </div>
-                            <div class="acess-controles">
-                                <button class="acess-btn" id="btn-fonte-diminuir" onclick="alterarFonte(-1)" aria-label="Diminuir tamanho da fonte">
-                                    <span class="acess-btn-icon">A−</span>
-                                    <span class="acess-btn-label">Diminuir</span>
-                                </button>
-                                <div class="acess-valor-display" id="display-fonte" aria-live="polite" aria-label="Tamanho de fonte atual">100%</div>
-                                <button class="acess-btn acess-btn-destaque" id="btn-fonte-aumentar" onclick="alterarFonte(1)" aria-label="Aumentar tamanho da fonte">
-                                    <span class="acess-btn-icon">A+</span>
-                                    <span class="acess-btn-label">Aumentar</span>
-                                </button>
-                                <button class="acess-btn acess-btn-reset" onclick="resetarFonte()" aria-label="Restaurar tamanho padrão da fonte">
-                                    <span class="acess-btn-icon">↺</span>
-                                    <span class="acess-btn-label">Padrão</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="acess-divider"></div>
-                        <div class="acess-grupo">
-                            <div class="acess-grupo-header">
-                                <span class="acess-grupo-icon">🎨</span>
-                                <h3 class="acess-grupo-titulo">Esquema de Cores</h3>
-                            </div>
-                            <p class="acess-descricao">Escolha um tema visual adaptado às suas necessidades</p>
-                            <div class="acess-temas-grid">
-
-                                <button class="acess-tema-card acess-tema-ativo" id="tema-padrao" onclick="aplicarTema('padrao')" aria-pressed="true" aria-label="Tema padrão SAW">
-                                    <div class="acess-tema-preview tema-prev-padrao"></div>
-                                    <span class="acess-tema-nome">Padrão</span>
-                                    <span class="acess-tema-desc">Tema original sombrio</span>
-                                </button>
-
-                                <button class="acess-tema-card" id="tema-alto-contraste" onclick="aplicarTema('alto-contraste')" aria-pressed="false" aria-label="Alto contraste — texto amarelo em fundo preto">
-                                    <div class="acess-tema-preview tema-prev-contraste"></div>
-                                    <span class="acess-tema-nome">Alto Contraste</span>
-                                    <span class="acess-tema-desc">Amarelo sobre preto</span>
-                                </button>
-
-                                <button class="acess-tema-card" id="tema-alto-contraste-simples" onclick="aplicarTema('alto-contraste-simples')" aria-pressed="false" aria-label="Alto Contraste Simples — interface limpa com contraste elevado para melhor legibilidade">
-                                    <div class="acess-tema-preview tema-prev-contraste-simples"></div>
-                                    <span class="acess-tema-nome">Alto Contraste Simples</span>
-                                    <span class="acess-tema-desc">Interface com contraste elevado para melhor legibilidade.</span>
-                                </button>
-
-                                <button class="acess-tema-card" id="tema-sepia" onclick="aplicarTema('sepia')" aria-pressed="false" aria-label="Tema sépia — tons quentes de papel envelhecido">
-                                    <div class="acess-tema-preview tema-prev-sepia"></div>
-                                    <span class="acess-tema-nome">Sépia</span>
-                                    <span class="acess-tema-desc">Tons quentes de papel</span>
-                                </button>
-
-                                <button class="acess-tema-card" id="tema-protanopia" onclick="aplicarTema('protanopia')" aria-pressed="false" aria-label="Tema para protanopia — otimizado para daltonismo vermelho-verde">
-                                    <div class="acess-tema-preview tema-prev-protanopia"></div>
-                                    <span class="acess-tema-nome">Protanopia</span>
-                                    <span class="acess-tema-desc">Daltonismo vermelho-verde</span>
-                                </button>
-
-                                <button class="acess-tema-card" id="tema-deuteranopia" onclick="aplicarTema('deuteranopia')" aria-pressed="false" aria-label="Tema para deuteranopia — azul e laranja">
-                                    <div class="acess-tema-preview tema-prev-deuteranopia"></div>
-                                    <span class="acess-tema-nome">Deuteranopia</span>
-                                    <span class="acess-tema-desc">Azul e laranja</span>
-                                </button>
-
-                            </div>
-                        </div>
-
-                        <div class="acess-divider"></div>
-                        <div class="acess-grupo">
-                            <div class="acess-grupo-header">
-                                <span class="acess-grupo-icon">🖥️</span>
-                                <h3 class="acess-grupo-titulo">Tema da Interface</h3>
-                            </div>
-                            <p class="acess-descricao">Escolha como o tema da interface será exibido.</p>
-                            <div class="acess-temas-grid acess-interface-grid">
-
-                                <button class="acess-tema-card" id="interface-claro" onclick="aplicarInterfaceTema('claro')" aria-pressed="false" aria-label="Interface com fundo claro e texto escuro">
-                                    <div class="acess-tema-preview interface-prev-claro"></div>
-                                    <span class="acess-tema-nome">Claro</span>
-                                    <span class="acess-tema-desc">Interface com fundo claro e texto escuro.</span>
-                                </button>
-
-                                <button class="acess-tema-card" id="interface-escuro" onclick="aplicarInterfaceTema('escuro')" aria-pressed="false" aria-label="Interface com fundo escuro e texto claro">
-                                    <div class="acess-tema-preview interface-prev-escuro"></div>
-                                    <span class="acess-tema-nome">Escuro</span>
-                                    <span class="acess-tema-desc">Interface com fundo escuro e texto claro.</span>
-                                </button>
-
-                                <button class="acess-tema-card" id="interface-sistema" onclick="aplicarInterfaceTema('sistema')" aria-pressed="false" aria-label="Interface adaptada ao tema do sistema operacional">
-                                    <div class="acess-tema-preview interface-prev-sistema"></div>
-                                    <span class="acess-tema-nome">De acordo com o sistema</span>
-                                    <span class="acess-tema-desc">A interface se adapta automaticamente ao tema configurado no sistema operacional ou navegador.</span>
-                                </button>
-
-                            </div>
-                        </div>
-
-                        <div class="acess-divider"></div>
-                        <div class="acess-grupo">
-                            <div class="acess-grupo-header">
-                                <span class="acess-grupo-icon">⚙️</span>
-                                <h3 class="acess-grupo-titulo">Opções Visuais e Motoras</h3>
-                            </div>
-                            <div class="acess-toggles">
-
-                                <div class="acess-toggle-item">
-                                    <div class="acess-toggle-info">
-                                        <span class="acess-toggle-icon">🚫</span>
-                                        <div>
-                                            <p class="acess-toggle-titulo">Remover Animações</p>
-                                            <p class="acess-toggle-desc">Desativa todas as animações e transições</p>
-                                        </div>
-                                    </div>
-                                    <button class="acess-toggle" id="toggle-animacoes" role="switch" aria-checked="false" onclick="toggleAnimacoes()" aria-label="Remover animações">
-                                        <span class="acess-toggle-thumb"></span>
-                                    </button>
-                                </div>
-
-                                <div class="acess-toggle-item">
-                                    <div class="acess-toggle-info">
-                                        <span class="acess-toggle-icon">📏</span>
-                                        <div>
-                                            <p class="acess-toggle-titulo">Espaçamento Ampliado</p>
-                                            <p class="acess-toggle-desc">Aumenta o espaço entre linhas e parágrafos</p>
-                                        </div>
-                                    </div>
-                                    <button class="acess-toggle" id="toggle-espacamento" role="switch" aria-checked="false" onclick="toggleEspacamento()" aria-label="Espaçamento ampliado">
-                                        <span class="acess-toggle-thumb"></span>
-                                    </button>
-                                </div>
-
-                                <div class="acess-toggle-item">
-                                    <div class="acess-toggle-info">
-                                        <span class="acess-toggle-icon">🖱️</span>
-                                        <div>
-                                            <p class="acess-toggle-titulo">Cursor Ampliado</p>
-                                            <p class="acess-toggle-desc">Aumenta o cursor do mouse para melhor visibilidade</p>
-                                        </div>
-                                    </div>
-                                    <button class="acess-toggle" id="toggle-cursor" role="switch" aria-checked="false" onclick="toggleCursor()" aria-label="Cursor ampliado">
-                                        <span class="acess-toggle-thumb"></span>
-                                    </button>
-                                </div>
-
-                                <div class="acess-toggle-item">
-                                    <div class="acess-toggle-info">
-                                        <span class="acess-toggle-icon">🔍</span>
-                                        <div>
-                                            <p class="acess-toggle-titulo">Realçar Foco</p>
-                                            <p class="acess-toggle-desc">Destaca visualmente o elemento focado pelo teclado</p>
-                                        </div>
-                                    </div>
-                                    <button class="acess-toggle" id="toggle-foco" role="switch" aria-checked="false" onclick="toggleFoco()" aria-label="Realçar foco">
-                                        <span class="acess-toggle-thumb"></span>
-                                    </button>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="acess-divider"></div>
-                        <div class="acess-grupo">
-                            <div class="acess-grupo-header">
-                                <span class="acess-grupo-icon">🔊</span>
-                                <h3 class="acess-grupo-titulo">Leitor de Texto</h3>
-                            </div>
-                            <p class="acess-descricao">Selecione qualquer parágrafo abaixo e ouça a leitura em voz alta</p>
-
-                            <div class="acess-leitor">
-                                <div class="acess-leitor-textarea-wrap">
-                                    <label for="leitor-input" class="sr-only">Texto para leitura</label>
-                                    <textarea id="leitor-input" class="acess-leitor-input"
-                                              placeholder="Cole ou digite aqui o texto que deseja ouvir...&#10;&#10;Dica: você pode copiar qualquer trecho da redação ou das explicações da plataforma e colar aqui para ouvir a leitura!"
-                                              aria-label="Área de texto para leitura em voz alta"
-                                              rows="5"></textarea>
-                                </div>
-
-                                <div class="acess-leitor-controles">
-                                    <div class="acess-leitor-cfg">
-                                        <label class="acess-cfg-label" for="leitor-velocidade">
-                                            <span>🏃</span> Velocidade
-                                        </label>
-                                        <input type="range" id="leitor-velocidade" class="acess-range"
-                                               min="0.5" max="2" step="0.1" value="1"
-                                               aria-label="Velocidade de leitura"
-                                               oninput="atualizarVelocidade(this.value)">
-                                        <span class="acess-range-val" id="val-velocidade">1.0x</span>
-                                    </div>
-
-                                    <div class="acess-leitor-cfg">
-                                        <label class="acess-cfg-label" for="leitor-tom">
-                                            <span>🎵</span> Tom
-                                        </label>
-                                        <input type="range" id="leitor-tom" class="acess-range"
-                                               min="0.5" max="2" step="0.1" value="1"
-                                               aria-label="Tom da voz"
-                                               oninput="atualizarTom(this.value)">
-                                        <span class="acess-range-val" id="val-tom">1.0</span>
-                                    </div>
-                                </div>
-
-                                <div class="acess-leitor-btns">
-                                    <button class="acess-btn acess-btn-destaque acess-btn-lg" id="btn-ler" onclick="lerTexto()" aria-label="Iniciar leitura">
-                                        <span class="acess-btn-icon">▶</span>
-                                        <span class="acess-btn-label">Ler em Voz Alta</span>
-                                    </button>
-                                    <button class="acess-btn" id="btn-pausar" onclick="pausarLeitura()" aria-label="Pausar leitura" disabled>
-                                        <span class="acess-btn-icon">⏸</span>
-                                        <span class="acess-btn-label">Pausar</span>
-                                    </button>
-                                    <button class="acess-btn" id="btn-parar" onclick="pararLeitura()" aria-label="Parar leitura" disabled>
-                                        <span class="acess-btn-icon">⏹</span>
-                                        <span class="acess-btn-label">Parar</span>
-                                    </button>
-                                </div>
-
-                                <div class="acess-leitor-status" id="leitor-status" aria-live="assertive" aria-atomic="true"></div>
-                            </div>
-                        </div>
-
-                        <div class="acess-divider"></div>
-                        <div class="acess-reset-geral">
-                            <button class="acess-btn acess-btn-reset acess-btn-lg" onclick="resetarTudo()" aria-label="Restaurar todas as configurações padrão">
-                                <span class="acess-btn-icon">↺</span>
-                                <span class="acess-btn-label">Restaurar Todas as Configurações</span>
-                            </button>
-                            <p class="acess-reset-nota">As preferências são salvas automaticamente para sua próxima visita</p>
-                        </div>
-
-                    </div>
-                </div>
-            </section>
-
-        </div>
-        <!-- ══════════════════════════════════════════════════════════════════
-             PAINEL PERFIL & DESEMPENHO
-             ══════════════════════════════════════════════════════════════════ -->
-        <div id="panel-perfil" class="tab-panel" role="tabpanel" aria-labelledby="tab-perfil">
-
-            <header class="page-header">
-                <h1 class="main-title fade-in">
-                    <span class="title-icon">👤</span>
-                    Meu Perfil
-                    <span class="title-subtitle">Acompanhe seu desempenho e gerencie sua conta</span>
-                </h1>
-            </header>
-
-            <div class="perfil-layout">
-
-                <!-- ── COLUNA ESQUERDA: Perfil do Usuário ── -->
-                <div class="perfil-col-esquerda">
-
-                    <!-- Card: Informações do Usuário -->
-                    <div class="card card-perfil-usuario fade-in" id="card-usuario">
-
-                        <!-- Skeleton de carregamento -->
-                        <div class="perfil-skeleton" id="perfil-skeleton" aria-hidden="true">
-                            <div class="skel-avatar"></div>
-                            <div class="skel-linha skel-lg"></div>
-                            <div class="skel-linha skel-md"></div>
-                            <div class="skel-linha skel-sm"></div>
-                        </div>
-
-                        <!-- Conteúdo real (oculto até carregar) -->
-                        <div class="perfil-usuario-conteudo hidden" id="perfil-usuario-conteudo">
-
-                            <div class="perfil-avatar-wrapper">
-                                <div class="perfil-avatar" id="perfil-avatar" aria-label="Foto de perfil">
-                                    <img id="perfil-foto" src="" alt="Foto de perfil" class="perfil-foto hidden"/>
-                                    <span id="perfil-iniciais" class="perfil-iniciais" aria-hidden="true"></span>
-                                </div>
-                                <span class="perfil-nivel-badge" id="perfil-nivel-badge" title="Nível atual">1</span>
-                            </div>
-
-                            <div class="perfil-dados">
-                                <h2 class="perfil-nome" id="perfil-nome">Carregando...</h2>
-                                <p class="perfil-titulo-nivel" id="perfil-titulo-nivel">—</p>
-
-                                <div class="perfil-info-lista">
-                                    <div class="perfil-info-item">
-                                        <span class="perfil-info-icone" aria-hidden="true">✉️</span>
-                                        <div>
-                                            <span class="perfil-info-label">E-mail</span>
-                                            <span class="perfil-info-valor" id="perfil-email">—</span>
-                                        </div>
-                                    </div>
-                                    <div class="perfil-info-item">
-                                        <span class="perfil-info-icone" aria-hidden="true">📅</span>
-                                        <div>
-                                            <span class="perfil-info-label">Membro desde</span>
-                                            <span class="perfil-info-valor" id="perfil-criacao">—</span>
-                                        </div>
-                                    </div>
-                                    <div class="perfil-info-item">
-                                        <span class="perfil-info-icone" aria-hidden="true">🕐</span>
-                                        <div>
-                                            <span class="perfil-info-label">Último acesso</span>
-                                            <span class="perfil-info-valor" id="perfil-ultimo-acesso">—</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- Estado: não logado -->
-                        <div class="perfil-nao-logado hidden" id="perfil-nao-logado">
-                            <span class="perfil-nao-logado-icone" aria-hidden="true">🔒</span>
-                            <p>Você não está conectado.</p>
-                            <button class="btn btn-primary" onclick="ativarAba('inicio')">Fazer Login</button>
-                        </div>
-
-                    </div>
-                    <!-- /card-perfil-usuario -->
-
-                    <!-- Card: Métodos de Login -->
-                    <div class="card fade-in" id="card-login-metodos">
-                        <div class="card-header">
-                            <div class="card-title">
-                                <span class="icon" aria-hidden="true">🔐</span>
-                                <h3>Métodos de Login</h3>
-                            </div>
-                            <p class="card-subtitle">Gerencie como você acessa a plataforma</p>
-                        </div>
-
-                        <div class="login-metodos-lista" id="login-metodos-lista" role="list">
-
-                            <!-- Google -->
-                            <div class="login-metodo-item" id="metodo-google" role="listitem" data-provider="google.com">
-                                <div class="login-metodo-info">
-                                    <span class="login-metodo-icone" aria-hidden="true">
-                                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
-                                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                                        </svg>
-                                    </span>
-                                    <div>
-                                        <span class="login-metodo-nome">Google</span>
-                                        <span class="login-metodo-status" id="status-google">Verificando...</span>
-                                    </div>
-                                </div>
-                                <button class="login-metodo-btn" id="btn-google"
-                                        onclick="alternarProvedorLogin('google.com')"
-                                        aria-label="Gerenciar login com Google">—</button>
-                            </div>
-
-                            <!-- E-mail e Senha -->
-                            <div class="login-metodo-item" id="metodo-password" role="listitem" data-provider="password">
-                                <div class="login-metodo-info">
-                                    <span class="login-metodo-icone" aria-hidden="true">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
-                                             stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
-                                            <rect x="2" y="4" width="20" height="16" rx="2"/>
-                                            <polyline points="22,4 12,13 2,4"/>
-                                        </svg>
-                                    </span>
-                                    <div>
-                                        <span class="login-metodo-nome">E-mail e Senha</span>
-                                        <span class="login-metodo-status" id="status-password">Verificando...</span>
-                                    </div>
-                                </div>
-                                <button class="login-metodo-btn" id="btn-password"
-                                        onclick="alternarProvedorLogin('password')"
-                                        aria-label="Gerenciar login com E-mail e Senha">—</button>
-                            </div>
-
-                            <!-- Apple -->
-                            <div class="login-metodo-item" id="metodo-apple" role="listitem" data-provider="apple.com">
-                                <div class="login-metodo-info">
-                                    <span class="login-metodo-icone" aria-hidden="true">
-                                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
-                                            <path fill="currentColor" d="M14.94 5.19A4.38 4.38 0 0 0 16 2a4.44 4.44 0 0 0-3 1.52 4.17 4.17 0 0 0-1 3.09 3.69 3.69 0 0 0 2.94-1.42zm2.52 7.44a4.51 4.51 0 0 1 2.16-3.81 4.66 4.66 0 0 0-3.66-2c-1.56-.16-3 .91-3.83.91s-2-.89-3.3-.87a4.92 4.92 0 0 0-4.14 2.53C2.89 12.28 4 16.2 5.5 18.37c.75 1.07 1.62 2.27 2.77 2.22s1.54-.7 2.89-.7 1.73.7 2.91.67 1.95-1.07 2.68-2.15a11.09 11.09 0 0 0 1.2-2.48 4.39 4.39 0 0 1-2.49-3.3z"/>
-                                        </svg>
-                                    </span>
-                                    <div>
-                                        <span class="login-metodo-nome">Apple ID</span>
-                                        <span class="login-metodo-status" id="status-apple">Verificando...</span>
-                                    </div>
-                                </div>
-                                <button class="login-metodo-btn" id="btn-apple"
-                                        onclick="alternarProvedorLogin('apple.com')"
-                                        aria-label="Gerenciar login com Apple ID">—</button>
-                            </div>
-
-                            <!-- GitHub -->
-                            <div class="login-metodo-item" id="metodo-github" role="listitem" data-provider="github.com">
-                                <div class="login-metodo-info">
-                                    <span class="login-metodo-icone" aria-hidden="true">
-                                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
-                                            <path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
-                                        </svg>
-                                    </span>
-                                    <div>
-                                        <span class="login-metodo-nome">GitHub</span>
-                                        <span class="login-metodo-status" id="status-github">Verificando...</span>
-                                    </div>
-                                </div>
-                                <button class="login-metodo-btn" id="btn-github"
-                                        onclick="alternarProvedorLogin('github.com')"
-                                        aria-label="Gerenciar login com GitHub">—</button>
-                            </div>
-
-                        </div>
-
-                        <p class="login-seguranca-nota" aria-live="polite">
-                            <span aria-hidden="true">🛡️</span>
-                            Para desconectar um método, você deve ter pelo menos um método ativo.
-                        </p>
-                    </div>
-                    <!-- /card-login-metodos -->
-
-                </div>
-                <!-- /perfil-col-esquerda -->
-
-                <!-- ── COLUNA DIREITA: Desempenho ── -->
-                <div class="perfil-col-direita">
-
-                    <!-- Card: Estatísticas de Desempenho -->
-                    <div class="card fade-in" id="card-desempenho">
-                        <div class="card-header">
-                            <div class="card-title">
-                                <span class="icon" aria-hidden="true">📊</span>
-                                <h3>Desempenho na Plataforma</h3>
-                            </div>
-                            <p class="card-subtitle">Sua evolução em tempo real</p>
-                        </div>
-
-                        <!-- Progresso Geral -->
-                        <div class="desempenho-progresso-card">
-                            <div class="desempenho-progresso-header">
-                                <span class="desempenho-progresso-label">Progresso para o próximo nível</span>
-                                <span class="desempenho-progresso-valor" id="progresso-pct">0%</span>
-                            </div>
-                            <div class="desempenho-barra-container" role="progressbar"
-                                 aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
-                                 aria-label="Progresso geral" id="barra-progresso-container">
-                                <div class="desempenho-barra" id="barra-progresso"></div>
-                            </div>
-                            <p class="desempenho-progresso-descricao" id="progresso-desc">Continue praticando para subir de nível!</p>
-                        </div>
-
-                        <!-- Grid de Estatísticas -->
-                        <div class="desempenho-stats-grid">
-
-                            <div class="desempenho-stat-card" title="Pontuação total acumulada">
-                                <div class="desempenho-stat-icone desempenho-stat-primary" aria-hidden="true">⭐</div>
-                                <div class="desempenho-stat-info">
-                                    <span class="desempenho-stat-valor" id="stat-pontuacao">0</span>
-                                    <span class="desempenho-stat-label">Pontuação Total</span>
-                                </div>
-                            </div>
-
-                            <div class="desempenho-stat-card" title="Redações analisadas">
-                                <div class="desempenho-stat-icone desempenho-stat-accent" aria-hidden="true">📝</div>
-                                <div class="desempenho-stat-info">
-                                    <span class="desempenho-stat-valor" id="stat-redacoes">0</span>
-                                    <span class="desempenho-stat-label">Redações Feitas</span>
-                                </div>
-                            </div>
-
-                            <div class="desempenho-stat-card" title="Total de acertos em exercícios">
-                                <div class="desempenho-stat-icone desempenho-stat-success" aria-hidden="true">✅</div>
-                                <div class="desempenho-stat-info">
-                                    <span class="desempenho-stat-valor" id="stat-acertos">0</span>
-                                    <span class="desempenho-stat-label">Acertos</span>
-                                </div>
-                            </div>
-
-                            <div class="desempenho-stat-card" title="Maior sequência de dias">
-                                <div class="desempenho-stat-icone desempenho-stat-warning" aria-hidden="true">🔥</div>
-                                <div class="desempenho-stat-info">
-                                    <span class="desempenho-stat-valor" id="stat-sequencia">0</span>
-                                    <span class="desempenho-stat-label">Maior Sequência</span>
-                                </div>
-                            </div>
-
-                            <div class="desempenho-stat-card" title="Nível atual na plataforma">
-                                <div class="desempenho-stat-icone desempenho-stat-primary" aria-hidden="true">🏆</div>
-                                <div class="desempenho-stat-info">
-                                    <span class="desempenho-stat-valor" id="stat-nivel">1</span>
-                                    <span class="desempenho-stat-label">Nível Atual</span>
-                                </div>
-                            </div>
-
-                            <div class="desempenho-stat-card" title="XP acumulado">
-                                <div class="desempenho-stat-icone desempenho-stat-info" aria-hidden="true">⚡</div>
-                                <div class="desempenho-stat-info">
-                                    <span class="desempenho-stat-valor" id="stat-xp">0</span>
-                                    <span class="desempenho-stat-label">XP Total</span>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- Última Atividade -->
-                        <div class="desempenho-ultima-atividade" id="ultima-atividade-box">
-                            <span class="desempenho-ult-icone" aria-hidden="true">🕐</span>
-                            <div>
-                                <span class="desempenho-ult-label">Última Atividade</span>
-                                <span class="desempenho-ult-valor" id="stat-ultima-atividade">Nenhuma atividade registrada</span>
-                            </div>
-                        </div>
-
-                    </div>
-                    <!-- /card-desempenho -->
-
-                    <!-- Card: Histórico Recente -->
-                    <div class="card fade-in" id="card-historico-perfil">
-                        <div class="card-header">
-                            <div class="card-title">
-                                <span class="icon" aria-hidden="true">📋</span>
-                                <h3>Histórico Recente</h3>
-                            </div>
-                            <p class="card-subtitle">Suas últimas atividades na plataforma</p>
-                        </div>
-
-                        <div class="historico-lista" id="historico-lista-perfil" role="list">
-                            <div class="historico-vazio" id="historico-vazio-perfil">
-                                <span aria-hidden="true">📭</span>
-                                <p>Nenhuma atividade ainda. Comece a praticar!</p>
-                                <button class="btn btn-primary btn-sm" onclick="ativarAba('pratica')">
-                                    Começar Prática
-                                </button>
-                            </div>
-                        </div>
-
-                    </div>
-                    <!-- /card-historico-perfil -->
-
-                </div>
-                <!-- /perfil-col-direita -->
-
-            </div>
-            <!-- /perfil-layout -->
-
-        </div>
-        <!-- /panel-perfil -->
-
-        <footer class="page-footer fade-in">
-            <div class="card card-footer">
-                <p class="footer-message">
-                    <span class="footer-icon">❤️</span>
-                    Desenvolvido com dedicação para ajudar você a conquistar a nota 1000!
-                </p>
-                <p class="footer-copyright">
-                    © 2026 - Plataforma ENEM - Todos os direitos reservados
-                </p>
-            </div>
-        </footer>
-
-    </main>
-    <div id="notificacoes-container" class="notificacoes-container" role="region" aria-live="polite"></div>
-
-    <!-- ══════════════════════════════════════════════════════════════════
-         MODAL DE PERFIL / LOGIN
-         ══════════════════════════════════════════════════════════════════ -->
-    <div class="perfil-modal-overlay hidden" id="perfil-modal-overlay"></div>
-
-    <div class="perfil-modal hidden" id="perfil-modal" role="dialog" aria-modal="true"
-         aria-labelledby="modal-titulo" aria-hidden="true">
-
-        <!-- ── PAINEL: NÃO LOGADO ── -->
-        <div id="modal-painel-login" class="modal-painel">
-            <div class="modal-header">
-                <h2 class="modal-titulo" id="modal-titulo">Entrar na plataforma</h2>
-                <button class="modal-fechar-btn" onclick="fecharModalPerfil()" aria-label="Fechar">✕</button>
-            </div>
-
-            <p class="modal-subtitulo">Salve seu progresso e acesse de qualquer lugar</p>
-
-            <!-- Alerta de erro -->
-            <div class="modal-alerta hidden" id="modal-alerta" role="alert"></div>
-
-            <!-- Login com Google -->
-            <button class="modal-btn-social modal-btn-google" id="btn-login-google"
-                    onclick="loginComGoogle()" aria-label="Entrar com Google">
-                <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                </svg>
-                Continuar com Google
-            </button>
-
-            <div class="modal-divisor"><span>ou entre com e-mail</span></div>
-
-            <!-- Formulário de E-mail/Senha -->
-            <div class="modal-form" id="modal-form-email">
-                <div class="modal-campo">
-                    <label for="modal-email" class="modal-label">E-mail</label>
-                    <input type="email" id="modal-email" class="form-input"
-                           placeholder="seu@email.com" autocomplete="email"/>
-                </div>
-                <div class="modal-campo">
-                    <label for="modal-senha" class="modal-label">Senha</label>
-                    <div class="modal-senha-wrapper">
-                        <input type="password" id="modal-senha" class="form-input"
-                               placeholder="••••••••" autocomplete="current-password"/>
-                        <button type="button" class="modal-senha-toggle"
-                                onclick="toggleSenhaVisivel()" aria-label="Mostrar senha">
-                            <svg id="olho-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                <circle cx="12" cy="12" r="3"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <button class="btn btn-primary" style="width:100%;justify-content:center;"
-                        id="btn-login-email" onclick="loginComEmail()">
-                    Entrar
-                </button>
-                <div class="modal-links">
-                    <button class="modal-link" onclick="mostrarEsqueciSenha()">Esqueci minha senha</button>
-                    <button class="modal-link" onclick="mostrarCadastro()">Criar conta</button>
-                </div>
-            </div>
-
-            <!-- Formulário de Cadastro (oculto inicialmente) -->
-            <div class="modal-form hidden" id="modal-form-cadastro">
-                <div class="modal-campo">
-                    <label for="modal-nome" class="modal-label">Nome</label>
-                    <input type="text" id="modal-nome" class="form-input" placeholder="Seu nome"/>
-                </div>
-                <div class="modal-campo">
-                    <label for="modal-email-cad" class="modal-label">E-mail</label>
-                    <input type="email" id="modal-email-cad" class="form-input" placeholder="seu@email.com"/>
-                </div>
-                <div class="modal-campo">
-                    <label for="modal-senha-cad" class="modal-label">Senha</label>
-                    <input type="password" id="modal-senha-cad" class="form-input"
-                           placeholder="Mínimo 6 caracteres"/>
-                </div>
-                <button class="btn btn-primary" style="width:100%;justify-content:center;"
-                        id="btn-cadastrar" onclick="cadastrarEmail()">
-                    Criar Conta
-                </button>
-                <div class="modal-links">
-                    <button class="modal-link" onclick="mostrarLogin()">Já tenho conta</button>
-                </div>
-            </div>
-
-            <!-- Formulário: Esqueci Senha (oculto inicialmente) -->
-            <div class="modal-form hidden" id="modal-form-esqueci">
-                <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1rem;">
-                    Informe seu e-mail e enviaremos um link de recuperação.
-                </p>
-                <div class="modal-campo">
-                    <label for="modal-email-reset" class="modal-label">E-mail</label>
-                    <input type="email" id="modal-email-reset" class="form-input" placeholder="seu@email.com"/>
-                </div>
-                <button class="btn btn-primary" style="width:100%;justify-content:center;"
-                        onclick="enviarResetSenha()">
-                    Enviar link de recuperação
-                </button>
-                <div class="modal-links">
-                    <button class="modal-link" onclick="mostrarLogin()">Voltar ao login</button>
-                </div>
-            </div>
-
-        </div>
-        <!-- /modal-painel-login -->
-
-        <!-- ── PAINEL: LOGADO ── -->
-        <div id="modal-painel-perfil" class="modal-painel hidden">
-            <div class="modal-header">
-                <h2 class="modal-titulo">Meu Perfil</h2>
-                <button class="modal-fechar-btn" onclick="fecharModalPerfil()" aria-label="Fechar">✕</button>
-            </div>
-
-            <!-- Mini perfil -->
-            <div class="modal-mini-perfil">
-                <div class="modal-mini-avatar" id="modal-mini-avatar">
-                    <img id="modal-mini-foto" src="" alt="" class="hidden"/>
-                    <span id="modal-mini-iniciais"></span>
-                </div>
-                <div class="modal-mini-info">
-                    <strong id="modal-mini-nome">—</strong>
-                    <span id="modal-mini-email">—</span>
-                    <span id="modal-mini-nivel" class="modal-mini-nivel-badge">Nível 1</span>
-                </div>
-            </div>
-
-            <!-- Acesso rápido às estatísticas -->
-            <div class="modal-stats-rapido">
-                <div class="modal-stat-item">
-                    <span class="modal-stat-val" id="mstat-xp">0</span>
-                    <span class="modal-stat-lbl">XP</span>
-                </div>
-                <div class="modal-stat-item">
-                    <span class="modal-stat-val" id="mstat-redacoes">0</span>
-                    <span class="modal-stat-lbl">Redações</span>
-                </div>
-                <div class="modal-stat-item">
-                    <span class="modal-stat-val" id="mstat-sequencia">0</span>
-                    <span class="modal-stat-lbl">Sequência 🔥</span>
-                </div>
-            </div>
-
-            <!-- Botões de ação -->
-            <div class="modal-acoes">
-                <button class="btn btn-secondary" style="width:100%;justify-content:center;"
-                        onclick="fecharModalPerfil(); ativarAba('perfil');">
-                    📊 Ver Perfil Completo
-                </button>
-                <button class="modal-btn-sair" onclick="fazerLogout()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                         stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                        <polyline points="16 17 21 12 16 7"/>
-                        <line x1="21" y1="12" x2="9" y2="12"/>
-                    </svg>
-                    Sair da Conta
-                </button>
-            </div>
-        </div>
-        <!-- /modal-painel-perfil -->
-
+  <!-- ═══════════════════════════════════════════════════
+       LOADING SCREEN
+  ═══════════════════════════════════════════════════ -->
+  <div class="loader-overlay" id="loader">
+    <div class="loader-inner">
+      <div class="loader-logo">NF</div>
+      <div class="loader-bar-wrap">
+        <div class="loader-bar" id="loader-bar"></div>
+      </div>
+      <span class="loader-text" id="loader-text">INITIALIZING…</span>
     </div>
-    <!-- /perfil-modal -->
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       CURSOR GLOW
+  ═══════════════════════════════════════════════════ -->
+  <div class="cursor-glow" id="cursor-glow"></div>
+
+  <!-- ═══════════════════════════════════════════════════
+       NAVBAR
+  ═══════════════════════════════════════════════════ -->
+  <header class="navbar" id="navbar">
+    <div class="navbar-inner">
+
+      <!-- Logo -->
+      <a href="#" class="nav-logo" aria-label="NeonFall Home">
+        <span class="nav-logo-icon">⬡</span>
+        <span class="nav-logo-text">NEON<span class="nav-logo-accent">FALL</span></span>
+      </a>
+
+      <!-- Desktop links -->
+      <nav class="nav-links" aria-label="Navegação principal">
+        <a href="#home" class="nav-link">Home</a>
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#download" class="nav-link">Download</a>
+        <a href="#support" class="nav-link">Support</a>
+      </nav>
+
+      <!-- CTA -->
+      <a href="#download" class="btn btn-nav-cta">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download
+      </a>
+
+      <!-- Mobile hamburger -->
+      <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div class="nav-mobile" id="nav-mobile" aria-hidden="true">
+      <a href="#home" class="nav-link-mobile">Home</a>
+      <a href="#features" class="nav-link-mobile">Features</a>
+      <a href="#download" class="nav-link-mobile">Download</a>
+      <a href="#support" class="nav-link-mobile">Support</a>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════
+       HERO SECTION
+  ═══════════════════════════════════════════════════ -->
+  <main>
+    <section class="hero" id="home">
+
+      <!-- Animated background -->
+      <div class="hero-bg" aria-hidden="true">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="scanlines"></div>
+        <div class="grid-overlay"></div>
+        <canvas class="particles-canvas" id="particles-canvas"></canvas>
+      </div>
+
+      <!-- Hero content -->
+      <div class="hero-content" id="hero-content">
+
+        <!-- Badge -->
+        <div class="hero-badge" data-reveal>
+          <span class="badge-dot"></span>
+          v2.4.1 · SEASON III AVAILABLE
+        </div>
+
+        <!-- Title -->
+        <h1 class="hero-title" data-reveal data-delay="100">
+          <span class="title-line title-white">THE FUTURE OF</span>
+          <span class="title-line title-orange">NEONFALL</span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="hero-subtitle" data-reveal data-delay="200">
+          Download instantâneo · Windows &amp; Mac · Engine proprietária 4.0<br/>
+          Experiência otimizada para hardware moderno — zero compromisso.
+        </p>
+
+        <!-- Specs strip -->
+        <div class="hero-specs" data-reveal data-delay="300">
+          <div class="spec-item">
+            <span class="spec-value">4K</span>
+            <span class="spec-label">Ultra HD</span>
+          </div>
+          <div class="spec-divider"></div>
+          <div class="spec-item">
+            <span class="spec-value">144</span>
+            <span class="spec-label">FPS Target</span>
+          </div>
+          <div class="spec-divider"></div>
+          <div class="spec-item">
+            <span class="spec-value">2.1</span>
+            <span class="spec-label">GB Download</span>
+          </div>
+          <div class="spec-divider"></div>
+          <div class="spec-item">
+            <span class="spec-value">RTX</span>
+            <span class="spec-label">Ray Tracing</span>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="hero-actions" data-reveal data-delay="400" id="download">
+          <button class="btn btn-primary" id="btn-download" aria-label="Baixar NeonFall">
+            <span class="btn-glow"></span>
+            <svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            DOWNLOAD GRÁTIS
+            <span class="btn-shine"></span>
+          </button>
+          <a href="#features" class="btn btn-secondary">
+            VER FEATURES
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+          </a>
+        </div>
+
+        <!-- Trust strip -->
+        <div class="hero-trust" data-reveal data-delay="500">
+          <span class="trust-item">✓ Download seguro</span>
+          <span class="trust-sep">·</span>
+          <span class="trust-item">✓ Sem vírus</span>
+          <span class="trust-sep">·</span>
+          <span class="trust-item">✓ +500k jogadores</span>
+        </div>
+
+      </div>
+
+      <!-- Scroll indicator -->
+      <div class="scroll-indicator" aria-hidden="true">
+        <div class="scroll-line"></div>
+        <span>SCROLL</span>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         FEATURES SECTION
+    ═══════════════════════════════════════════════════ -->
+    <section class="features-section" id="features">
+      <div class="features-inner">
+        <div class="section-header" data-reveal>
+          <span class="section-tag">// FEATURES</span>
+          <h2 class="section-title">Por que <span class="text-orange">NeonFall?</span></h2>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card" data-reveal data-delay="0">
+            <div class="feature-icon">⚡</div>
+            <h3>Performance Extrema</h3>
+            <p>Engine proprietária otimizada para 144+ FPS mesmo em hardware intermediário.</p>
+          </div>
+          <div class="feature-card" data-reveal data-delay="100">
+            <div class="feature-icon">🌐</div>
+            <h3>Multiplayer Global</h3>
+            <p>Servidores em 12 regiões com latência &lt;20ms para o Brasil.</p>
+          </div>
+          <div class="feature-card" data-reveal data-delay="200">
+            <div class="feature-icon">🎨</div>
+            <h3>Visuais Cinemáticos</h3>
+            <p>Ray tracing em tempo real com suporte a 4K Ultra HD nativo.</p>
+          </div>
+          <div class="feature-card" data-reveal data-delay="300">
+            <div class="feature-icon">🔒</div>
+            <h3>Anti-Cheat Avançado</h3>
+            <p>Sistema proprietário de detecção garantindo partidas justas 24/7.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         SUPPORT / FOOTER
+    ═══════════════════════════════════════════════════ -->
+    <section class="support-section" id="support">
+      <div class="support-inner">
+        <p class="support-text" data-reveal>Precisa de ajuda? <a href="#" class="support-link">Acesse o suporte</a> ou <a href="#" class="support-link">entre na comunidade</a>.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════
+       DOWNLOAD MODAL
+  ═══════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="modal-overlay" aria-modal="true" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <div class="modal-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+        <div>
+          <h2 class="modal-title" id="modal-title">Download Iniciando</h2>
+          <p class="modal-version">NeonFall v2.4.1 — Season III</p>
+        </div>
+        <button class="modal-close" id="modal-close" aria-label="Fechar">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-info-row">
+          <span class="info-badge">2.1 GB</span>
+          <span class="info-badge">Windows / Mac</span>
+          <span class="info-badge info-green">✓ Verificado</span>
+        </div>
+        <p class="modal-desc">
+          O download do jogo será iniciado automaticamente.<br/>
+          Verifique sua <strong>pasta de downloads</strong> ao concluir.
+        </p>
+        <div class="modal-progress-wrap" id="modal-progress-wrap">
+          <div class="modal-progress-bar" id="modal-progress-bar"></div>
+        </div>
+        <p class="modal-note">Arquivo seguro · Sem adware · Sem bundleware</p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-modal-confirm" id="btn-confirm-download">
+          <span class="btn-glow"></span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          CONTINUAR DOWNLOAD
+        </button>
+        <button class="btn btn-ghost" id="btn-cancel-download">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden anchor for actual download trigger -->
+  <a id="real-download-link" href="assets/jogo.zip" download style="display:none" aria-hidden="true">Download</a>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
@@ -1502,6 +306,5 @@
     </script>
     
     <script src="TCC.js"></script>
-
 </body>
 </html>
