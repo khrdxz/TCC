@@ -1,277 +1,233 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#050505" />
-  <meta name="description" content="NeonFall — Experience the next evolution of gaming. Download now." />
-  <title>NeonFall — Download</title>
-  <link rel="stylesheet" href="TCC.CSS">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enchiridion — Launcher V1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Orbitron:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="TCC.css">
+<style>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+</style>
 </head>
 <body>
 
-  <!-- ═══════════════════════════════════════════════════
-       LOADING SCREEN
-  ═══════════════════════════════════════════════════ -->
-  <div class="loader-overlay" id="loader">
-    <div class="loader-inner">
-      <div class="loader-logo">EC</div>
-      <div class="loader-bar-wrap">
-        <div class="loader-bar" id="loader-bar"></div>
-      </div>
-      <span class="loader-text" id="loader-text">INITIALIZING…</span>
+<!-- CURSOR -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- LOADER -->
+<div class="loader-overlay" id="loaderOverlay">
+  <div class="loader-inner">
+    <div class="loader-sigil"></div>
+    <div class="loader-logo">ENCHIRIDION</div>
+    <div class="loader-bar-wrap">
+      <div class="loader-bar" id="loaderBar"></div>
     </div>
+    <div class="loader-text" id="loaderText">INICIALIZANDO SISTEMA</div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="navbar-inner">
+    <a href="#" class="nav-logo">
+      <span class="nav-logo-icon">⬡</span>
+      <span>ECHI<span class="nav-logo-accent">RI</span>DION</span>
+    </a>
+    <div class="nav-links">
+      <a href="#" class="nav-link">Menu</a>
+      <a href="#features" class="nav-link">Funções</a>
+      <a href="#support" class="nav-link">Suporte</a>
+    </div>
+    <button class="btn btn-nav-cta" id="navDownloadBtn" onclick="openModal()">
+      ↓ Download
+    </button>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <div class="hero-bg-base"></div>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="grid-overlay"></div>
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+    <div class="corner-shadow-tl"></div>
+    <div class="corner-shadow-br"></div>
+    <canvas class="particles-canvas" id="particlesCanvas"></canvas>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════
-       CURSOR GLOW
-  ═══════════════════════════════════════════════════ -->
-  <div class="cursor-glow" id="cursor-glow"></div>
+  <div class="hero-content">
+    <div class="hero-badge" data-reveal>
+      <span class="badge-dot"></span>
+      V2.4.1 · Beta 3.0 Disponível
+    </div>
 
-  <!-- ═══════════════════════════════════════════════════
-       NAVBAR
-  ═══════════════════════════════════════════════════ -->
-  <header class="navbar" id="navbar">
-    <div class="navbar-inner">
+    <div class="hero-title" data-reveal>
+      <span class="title-line title-pre">— ENCHIRIDION —</span>
+      <div style="position:relative">
+        <div class="title-bloom"></div>
+        <span class="title-line title-main">ENCHIRIDION</span>
+      </div>
+    </div>
 
-      <!-- Logo -->
-      <a href="#" class="nav-logo" aria-label="NeonFall Home">
-        <span class="nav-logo-icon">⬡</span>
-        <span class="nav-logo-text">ECHIRI<span class="nav-logo-accent">DION</span></span>
-      </a>
+    <p class="hero-subtitle" data-reveal>
+      Windows, Mac &amp; Android · Engine RPG Maker MV<br>
+      <em>Experiência otimizada para hardware moderno — zero compromisso.</em>
+    </p>
 
-      <!-- Desktop links -->
-      <nav class="nav-links" aria-label="Navegação principal">
-        <a href="#home" class="nav-link">MENU</a>
-        <a href="#features" class="nav-link">FUNÇÕES</a>
-        <a href="#support" class="nav-link">SUPORTE</a>
-      </nav>
+    <div class="hero-specs" data-reveal>
+      <div class="spec-item">
+        <span class="spec-value">1080P</span>
+        <span class="spec-label">UHD</span>
+      </div>
+      <div class="spec-divider"></div>
+      <div class="spec-item">
+        <span class="spec-value">60</span>
+        <span class="spec-label">FPS Lock</span>
+      </div>
+      <div class="spec-divider"></div>
+      <div class="spec-item">
+        <span class="spec-value">1.2</span>
+        <span class="spec-label">GB Download</span>
+      </div>
+      <div class="spec-divider"></div>
+      <div class="spec-item">
+        <span class="spec-value" style="font-size:0.7rem;color:var(--burnt-copper)">Rasteriz.</span>
+        <span class="spec-label">Alpha Blend</span>
+      </div>
+    </div>
 
-      <!-- CTA -->
-      <a href="#download" class="btn btn-nav-cta">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Download
-      </a>
-
-      <!-- Mobile hamburger -->
-      <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" aria-expanded="false">
-        <span></span><span></span><span></span>
+    <div class="hero-actions" data-reveal>
+      <button class="btn btn-primary" onclick="openModal()">
+        <span>↓</span>
+        <span>Download Grátis</span>
+        <span class="btn-shine"></span>
+        <span class="btn-glow"></span>
+      </button>
+      <button class="btn btn-secondary">
+        <span>▶</span>
+        <span>Ver Trailer</span>
       </button>
     </div>
 
-    <!-- Mobile menu -->
-    <div class="nav-mobile" id="nav-mobile" aria-hidden="true">
-      <a href="#home" class="nav-link-mobile">MENU</a>
-      <a href="#features" class="nav-link-mobile">FUNÇÕES</a>
-      <a href="#download" class="nav-link-mobile">DOWNLOAD</a>
-      <a href="#support" class="nav-link-mobile">SUPORTE</a>
-    </div>
-  </header>
-
-  <!-- ═══════════════════════════════════════════════════
-       HERO SECTION
-  ═══════════════════════════════════════════════════ -->
-  <main>
-    <section class="hero" id="home">
-
-      <!-- Animated background -->
-      <div class="hero-bg" aria-hidden="true">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
-        <div class="scanlines"></div>
-        <div class="grid-overlay"></div>
-        <canvas class="particles-canvas" id="particles-canvas"></canvas>
-      </div>
-
-      <!-- Hero content -->
-      <div class="hero-content" id="hero-content">
-
-        <!-- Badge -->
-        <div class="hero-badge" data-reveal>
-          <span class="badge-dot"></span>
-          v2.4.1 · BETA 3.0 DISPONÍVEL
-        </div>
-
-        <!-- Title -->
-        <h1 class="hero-title" data-reveal data-delay="100">
-          <span class="title-line title-white">O INÍCIO DO</span>
-          <span class="title-line title-orange">ENCHIRIDION</span>
-        </h1>
-
-        <!-- Subtitle -->
-        <p class="hero-subtitle" data-reveal data-delay="200">
-          Windows, Mac &amp; Android · 
-          Engine RPG MAKER MV <br/>
-          Experiência otimizada para hardware moderno — zero compromisso.
-        </p>
-
-        <!-- Specs strip -->
-        <div class="hero-specs" data-reveal data-delay="300">
-          <div class="spec-item">
-            <span class="spec-value">1080</span>
-            <span class="spec-label">P HD</span>
-          </div>
-          <div class="spec-divider"></div>
-          <div class="spec-item">
-            <span class="spec-value">60</span>
-            <span class="spec-label">FPS Lock</span>
-          </div>
-          <div class="spec-divider"></div>
-          <div class="spec-item">
-            <span class="spec-value">30</span>
-            <span class="spec-label">MB Download</span>
-          </div>
-          <div class="spec-divider"></div>
-          <div class="spec-item">
-            <span class="spec-value">Rasterization</span>
-            <span class="spec-label">Alpha Blending</span>
-          </div>
-        </div>
-
-        <!-- Buttons -->
-        <div class="hero-actions" data-reveal data-delay="400" id="download">
-          <button class="btn btn-primary" id="btn-download" aria-label="Baixar NeonFall">
-            <span class="btn-glow"></span>
-            <svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            DOWNLOAD GRÁTIS
-            <span class="btn-shine"></span>
-          </button>
-        </div>
-
-        <!-- Trust strip -->
-        <div class="hero-trust" data-reveal data-delay="500">
-          <span class="trust-item">✓ Download seguro</span>
-          <span class="trust-sep">·</span>
-          <span class="trust-item">✓ Sem vírus</span>
-          <span class="trust-sep">·</span>
-          <span class="trust-item">✓ +1K jogadores</span>
-        </div>
-
-      </div>
-
-      <!-- Scroll indicator -->
-      <div class="scroll-indicator" aria-hidden="true">
-        <div class="scroll-line"></div>
-        <span>SCROLL</span>
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════
-         FEATURES SECTION
-    ═══════════════════════════════════════════════════ -->
-    <section class="features-section" id="features">
-      <div class="features-inner">
-        <div class="section-header" data-reveal>
-          <span class="section-tag">// FUNÇÕES</span>
-          <h2 class="section-title">Por que <span class="text-orange">ECHIRIDION?</span></h2>
-        </div>
-        <div class="features-grid">
-          <div class="feature-card" data-reveal data-delay="0">
-            <div class="feature-icon">⚡</div>
-            <h3>Performance Extrema</h3>
-            <p>Engine proprietária otimizada para 120+ FPS mesmo em hardwares de entrada.</p>
-          </div>
-          <div class="feature-card" data-reveal data-delay="100">
-            <div class="feature-icon">🌐</div>
-            <h3>Save Local e Save em Login</h3>
-            <p>Servidores em 26 Estados com latência &lt;12ms para o Brasil.</p>
-          </div>
-          <div class="feature-card" data-reveal data-delay="200">
-            <div class="feature-icon">🎨</div>
-            <h3>Visuais Cinemáticos</h3>
-            <p>Renderização 2D nativa com suporte a WebGL, efeitos de iluminação simulada, shaders leves e composição visual otimizada para alta definição no RPG Maker MV.</p>
-          </div>
-          <div class="feature-card" data-reveal data-delay="300">
-            <div class="feature-icon">🔒</div>
-            <h3>Suporte geral</h3>
-            <p>Suporte geral à quaisquer dúvidas referentes ao jogo, downloads e configurações  .</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════
-         SUPPORT / FOOTER
-    ═══════════════════════════════════════════════════ -->
-    <section class="support-section" id="support">
-      <div class="support-inner">
-        <p class="support-text" data-reveal>Precisa de ajuda? <a href="#" class="support-link">Acesse o suporte</a> ou <a href="#" class="support-link">entre na comunidade</a>.</p>
-      </div>
-    </section>
-  </main>
-
-  <!-- ═══════════════════════════════════════════════════
-       DOWNLOAD MODAL
-  ═══════════════════════════════════════════════════ -->
-  <div class="modal-overlay" id="modal-overlay" aria-modal="true" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
-    <div class="modal" id="modal">
-      <div class="modal-header">
-        <div class="modal-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        </div>
-        <div>
-          <h2 class="modal-title" id="modal-title">Download Iniciando</h2>
-          <p class="modal-version">NeonFall v2.4.1 — Season III</p>
-        </div>
-        <button class="modal-close" id="modal-close" aria-label="Fechar">✕</button>
-      </div>
-
-      <div class="modal-body">
-        <div class="modal-info-row">
-          <span class="info-badge">2.1 GB</span>
-          <span class="info-badge">Windows / Mac</span>
-          <span class="info-badge info-green">✓ Verificado</span>
-        </div>
-        <p class="modal-desc">
-          O download do jogo será iniciado automaticamente.<br/>
-          Verifique sua <strong>pasta de downloads</strong> ao concluir.
-        </p>
-        <div class="modal-progress-wrap" id="modal-progress-wrap">
-          <div class="modal-progress-bar" id="modal-progress-bar"></div>
-        </div>
-        <p class="modal-note">Arquivo seguro · Sem adware · Sem bundleware</p>
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn btn-primary btn-modal-confirm" id="btn-confirm-download">
-          <span class="btn-glow"></span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          CONTINUAR DOWNLOAD
-        </button>
-        <button class="btn btn-ghost" id="btn-cancel-download">Cancelar</button>
-      </div>
+    <div class="hero-trust" data-reveal>
+      <span>✓ Download seguro</span>
+      <span class="trust-sep">·</span>
+      <span>✓ Sem vírus</span>
+      <span class="trust-sep">·</span>
+      <span>✓ +1K jogadores</span>
     </div>
   </div>
 
-  <!-- Hidden anchor for actual download trigger -->
-  <a id="real-download-link" href="assets/jogo.zip" download style="display:none" aria-hidden="true">Download</a>
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
 
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+<!-- FEATURES -->
+<section class="features-section" id="features">
+  <div class="features-inner">
+    <div class="section-header" data-reveal>
+      <span class="section-tag">⬡ ARSENAL DE FERRAMENTAS</span>
+      <h2 class="section-title">Forjado para a <span class="text-accent">Excelência</span></h2>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card" data-reveal>
+        <div class="feature-icon">⚔</div>
+        <h3>MOTOR OTIMIZADO</h3>
+        <p>Pipeline de renderização personalizado com rasterização acelerada por hardware e suporte a alpha blending avançado.</p>
+      </div>
+      <div class="feature-card" data-reveal>
+        <div class="feature-icon">◈</div>
+        <h3>RESOLUÇÃO NATIVA</h3>
+        <p>Saída Full HD 1080p estável a 60fps travados, garantindo fluidez absoluta em qualquer hardware moderno.</p>
+      </div>
+      <div class="feature-card" data-reveal>
+        <div class="feature-icon">⬡</div>
+        <h3>MULTI-PLATAFORMA</h3>
+        <p>Compatibilidade nativa com Windows, macOS e Android sem comprometer performance ou fidelidade visual.</p>
+      </div>
+      <div class="feature-card" data-reveal>
+        <div class="feature-icon">◎</div>
+        <h3>INSTALAÇÃO LEVE</h3>
+        <p>Apenas 30MB de download comprimido — otimizado para distribuição rápida sem sacrificar conteúdo.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyAgAp3PWV0du0k_qBxvXJE8KmAemDAz2Wg",
-    authDomain: "plataforma-enem-f2185.firebaseapp.com",
-    projectId: "plataforma-enem-f2185",
-    storageBucket: "plataforma-enem-f2185.firebasestorage.app",
-    messagingSenderId: "663205854300",
-    appId: "1:663205854300:web:55256104cde186f61bba99"
-  };
+<!-- SUPPORT -->
+<section class="support-section" id="support">
+  <div class="support-inner" data-reveal>
+    <span class="ornament">— ⬡ —</span>
+    <p class="support-text">
+      Encontrou um problema? Acesse nosso
+      <a href="#" class="support-link">portal de suporte</a>
+      ou entre em contato via
+      <a href="#" class="support-link">Discord</a>
+    </p>
+  </div>
+</section>
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-</script>
-    
-    <script src="TCC.js"></script>
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span class="footer-brand">ENCHIRIDION</span>
+    <div class="footer-divider"></div>
+    <span class="footer-copy">© 2026 · TODOS OS DIREITOS RESERVADOS</span>
+    <div class="footer-divider"></div>
+    <span class="footer-copy">RPG MAKER MV ENGINE</span>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-icon">↓</div>
+      <div>
+        <div class="modal-title">Enchiridion — Download</div>
+        <div class="modal-version">V2.4.1 RELEASE BUILD · 30.4 MB</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-info-row">
+        <span class="info-badge">Windows x64</span>
+        <span class="info-badge">macOS ARM</span>
+        <span class="info-badge">Android APK</span>
+        <span class="info-badge info-green">● Verificado</span>
+      </div>
+      <p class="modal-desc">
+        Baixe <strong>Enchiridion v2.4.1</strong> — a versão estável com todos os patches de otimização aplicados. A instalação é limpa e sem adware.
+      </p>
+      <div class="modal-progress-wrap" id="modalProgress">
+        <div class="modal-progress-bar" id="modalProgressBar"></div>
+      </div>
+      <p class="modal-note">SHA-256 VERIFICADO · ASSINATURA DIGITAL VÁLIDA</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary btn-modal-confirm" id="modalConfirmBtn" onclick="startDownload()">
+        <span>↓</span> Iniciar Download
+        <span class="btn-shine"></span>
+        <span class="btn-glow"></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="TCC.js"></script>
 </body>
 </html>
