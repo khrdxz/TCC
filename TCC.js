@@ -1,296 +1,135 @@
-/* ============================================================
-   NEONFALL — script.js
-   Handles: Loader · Cursor · Navbar · Particles · Reveal · Modal
-   ============================================================ */
-
-'use strict';
-
-// ─── DOM REFS ────────────────────────────────────────────────────────────────
-const loader          = document.getElementById('loader');
-const loaderBar       = document.getElementById('loader-bar');
-const loaderText      = document.getElementById('loader-text');
-const cursorGlow      = document.getElementById('cursor-glow');
-const navbar          = document.getElementById('navbar');
-const navHamburger    = document.getElementById('nav-hamburger');
-const navMobile       = document.getElementById('nav-mobile');
-const btnDownload     = document.getElementById('btn-download');
-const modalOverlay    = document.getElementById('modal-overlay');
-const modalClose      = document.getElementById('modal-close');
-const btnConfirm      = document.getElementById('btn-confirm-download');
-const btnCancel       = document.getElementById('btn-cancel-download');
-const progressWrap    = document.getElementById('modal-progress-wrap');
-const progressBar     = document.getElementById('modal-progress-bar');
-const realLink        = document.getElementById('real-download-link');
-const canvas          = document.getElementById('particles-canvas');
-const heroContent     = document.getElementById('hero-content');
-
-// ─── LOADER ──────────────────────────────────────────────────────────────────
-const LOAD_STEPS = [
-  'INITIALIZING…',
-  'LOADING ASSETS…',
-  'RENDERING ENGINE…',
-  'READY.',
-];
-
-(function runLoader() {
-  let progress = 0;
-  let stepIdx  = 0;
-
-  const interval = setInterval(() => {
-    // Random increments for realistic feel
-    progress += Math.random() * 18 + 8;
-    if (progress > 100) progress = 100;
-
-    loaderBar.style.width = progress + '%';
-
-    // Update label text at thresholds
-    const step = Math.floor((progress / 100) * (LOAD_STEPS.length - 1));
-    if (step !== stepIdx) {
-      stepIdx = step;
-      loaderText.textContent = LOAD_STEPS[Math.min(stepIdx, LOAD_STEPS.length - 1)];
-    }
-
-    if (progress >= 100) {
-      clearInterval(interval);
-      loaderText.textContent = LOAD_STEPS[LOAD_STEPS.length - 1];
-
-      setTimeout(() => {
-        loader.classList.add('hidden');
-        initReveal();       // start scroll reveals
-        animateHeroIn();    // hero entrance
-      }, 500);
-    }
-  }, 90);
-})();
-
-// ─── CURSOR GLOW ─────────────────────────────────────────────────────────────
-let mouseX = window.innerWidth / 2;
-let mouseY = window.innerHeight / 2;
-
-document.addEventListener('mousemove', (e) => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-  cursorGlow.style.left = mouseX + 'px';
-  cursorGlow.style.top  = mouseY + 'px';
+/* CURSOR */
+const dot = document.getElementById('cursorDot');
+const ring = document.getElementById('cursorRing');
+const glow = document.getElementById('cursorGlow');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+  glow.style.left = mx + 'px'; glow.style.top = my + 'px';
 });
-
-document.addEventListener('mouseleave', () => {
-  cursorGlow.style.opacity = '0';
-});
-document.addEventListener('mouseenter', () => {
-  cursorGlow.style.opacity = '1';
-});
-
-// ─── NAVBAR SCROLL ───────────────────────────────────────────────────────────
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 40) {
-    navbar.classList.add('scrolled');
-  } else {
-    navbar.classList.remove('scrolled');
-  }
-}, { passive: true });
-
-// ─── HAMBURGER MENU ──────────────────────────────────────────────────────────
-navHamburger.addEventListener('click', () => {
-  const open = navMobile.classList.toggle('open');
-  navHamburger.classList.toggle('open', open);
-  navHamburger.setAttribute('aria-expanded', open);
-  navMobile.setAttribute('aria-hidden', !open);
-});
-
-// Close mobile nav on link click
-navMobile.querySelectorAll('.nav-link-mobile').forEach(link => {
-  link.addEventListener('click', () => {
-    navMobile.classList.remove('open');
-    navHamburger.classList.remove('open');
-    navHamburger.setAttribute('aria-expanded', false);
-    navMobile.setAttribute('aria-hidden', true);
-  });
-});
-
-// ─── PARTICLES ───────────────────────────────────────────────────────────────
-(function initParticles() {
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-
-  let W, H;
-  const PARTICLE_COUNT = 55;
-  const particles = [];
-
-  function resize() {
-    W = canvas.width  = canvas.offsetWidth;
-    H = canvas.height = canvas.offsetHeight;
-  }
-
-  function Particle() {
-    this.reset(true);
-  }
-  Particle.prototype.reset = function (initial) {
-    this.x     = Math.random() * W;
-    this.y     = initial ? Math.random() * H : H + 10;
-    this.size  = Math.random() * 1.5 + 0.4;
-    this.speedY = -(Math.random() * 0.4 + 0.1);
-    this.speedX = (Math.random() - 0.5) * 0.2;
-    this.opacity = Math.random() * 0.6 + 0.1;
-    this.life  = 0;
-    this.maxLife = Math.random() * 300 + 200;
-  };
-  Particle.prototype.update = function () {
-    this.x   += this.speedX;
-    this.y   += this.speedY;
-    this.life++;
-    const ratio = this.life / this.maxLife;
-    this.alpha = this.opacity * Math.sin(ratio * Math.PI);
-
-    if (this.life >= this.maxLife || this.y < -10) {
-      this.reset(false);
-    }
-  };
-  Particle.prototype.draw = function () {
-    ctx.save();
-    ctx.globalAlpha = this.alpha;
-    ctx.fillStyle = `rgba(255, 136, 0, 1)`;
-    ctx.shadowBlur = 6;
-    ctx.shadowColor = 'rgba(255, 136, 0, 0.8)';
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-  };
-
-  resize();
-  for (let i = 0; i < PARTICLE_COUNT; i++) {
-    particles.push(new Particle());
-  }
-
-  let raf;
-  function tick() {
-    ctx.clearRect(0, 0, W, H);
-    for (const p of particles) {
-      p.update();
-      p.draw();
-    }
-    raf = requestAnimationFrame(tick);
-  }
-  tick();
-
-  window.addEventListener('resize', resize, { passive: true });
-})();
-
-// ─── HERO ENTRANCE ───────────────────────────────────────────────────────────
-function animateHeroIn() {
-  const reveals = heroContent.querySelectorAll('[data-reveal]');
-  reveals.forEach((el, i) => {
-    const delay = parseInt(el.dataset.delay || 0, 10) + i * 40;
-    setTimeout(() => el.classList.add('revealed'), delay);
-  });
+function animRing() {
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(animRing);
 }
+animRing();
+document.querySelectorAll('a,button,[role="button"]').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    ring.style.width = '48px'; ring.style.height = '48px';
+    ring.style.borderColor = 'rgba(128,14,19,0.6)';
+    dot.style.transform = 'translate(-50%,-50%) scale(0)';
+  });
+  el.addEventListener('mouseleave', () => {
+    ring.style.width = '32px'; ring.style.height = '32px';
+    ring.style.borderColor = 'rgba(196,154,108,0.5)';
+    dot.style.transform = 'translate(-50%,-50%) scale(1)';
+  });
+});
 
-// ─── SCROLL REVEAL ───────────────────────────────────────────────────────────
-function initReveal() {
-  const allReveal = document.querySelectorAll('[data-reveal]');
+/* LOADER */
+const loaderMsgs = ['INICIALIZANDO SISTEMA','CARREGANDO SHADERS','VERIFICANDO INTEGRIDADE','SISTEMA PRONTO'];
+const loaderBar = document.getElementById('loaderBar');
+const loaderText = document.getElementById('loaderText');
+let progress = 0;
+const loaderInterval = setInterval(() => {
+  progress += Math.random() * 12 + 3;
+  if (progress >= 100) { progress = 100; clearInterval(loaderInterval); }
+  loaderBar.style.width = progress + '%';
+  const idx = Math.min(Math.floor(progress / 25), 3);
+  loaderText.textContent = loaderMsgs[idx];
+  if (progress >= 100) {
+    setTimeout(() => {
+      document.getElementById('loaderOverlay').classList.add('hidden');
+      revealElements();
+    }, 500);
+  }
+}, 120);
 
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const delay = parseInt(entry.target.dataset.delay || 0, 10);
-          setTimeout(() => entry.target.classList.add('revealed'), delay);
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12 });
+/* NAVBAR SCROLL */
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+});
 
-    allReveal.forEach(el => {
-      // Skip hero elements — they're animated by animateHeroIn
-      if (!heroContent.contains(el)) {
-        observer.observe(el);
+/* REVEAL */
+function revealElements() {
+  const els = document.querySelectorAll('[data-reveal]');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('revealed'), i * 80);
+        obs.unobserve(e.target);
       }
     });
-  } else {
-    // Fallback: reveal everything immediately
-    allReveal.forEach(el => el.classList.add('revealed'));
-  }
+  }, { threshold: 0.15 });
+  els.forEach(el => obs.observe(el));
 }
 
-// ─── MODAL LOGIC ─────────────────────────────────────────────────────────────
+/* MODAL */
 function openModal() {
-  modalOverlay.classList.add('open');
-  modalOverlay.setAttribute('aria-hidden', 'false');
-  document.body.style.overflow = 'hidden';
-  // Focus trap
-  setTimeout(() => btnConfirm.focus(), 300);
+  document.getElementById('modalOverlay').classList.add('open');
 }
-
 function closeModal() {
-  modalOverlay.classList.remove('open');
-  modalOverlay.setAttribute('aria-hidden', 'true');
-  document.body.style.overflow = '';
-  // Reset progress
-  progressWrap.classList.remove('active');
-  progressBar.style.width = '0%';
-  btnConfirm.disabled = false;
-  btnConfirm.innerHTML = `
-    <span class="btn-glow"></span>
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-      <polyline points="7 10 12 15 17 10"/>
-      <line x1="12" y1="15" x2="12" y2="3"/>
-    </svg>
-    CONTINUAR DOWNLOAD`;
+  document.getElementById('modalOverlay').classList.remove('open');
+  const pb = document.getElementById('modalProgressBar');
+  document.getElementById('modalProgress').classList.remove('active');
+  pb.style.width = '0%';
+  document.getElementById('modalConfirmBtn').innerHTML = '<span>↓</span> Iniciar Download<span class="btn-shine"></span><span class="btn-glow"></span>';
+  document.getElementById('modalConfirmBtn').disabled = false;
 }
-
-function triggerDownload() {
-  // Show progress animation
-  progressWrap.classList.add('active');
-  btnConfirm.disabled = true;
-  btnConfirm.innerHTML = `
-    <span class="btn-glow"></span>
-    PREPARANDO…`;
-
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+function startDownload() {
+  const btn = document.getElementById('modalConfirmBtn');
+  btn.disabled = true; btn.innerHTML = 'Baixando...<span class="btn-shine"></span><span class="btn-glow"></span>';
+  document.getElementById('modalProgress').classList.add('active');
+  const pb = document.getElementById('modalProgressBar');
   let p = 0;
-  const interval = setInterval(() => {
-    p += Math.random() * 25 + 10;
-    if (p >= 100) {
-      p = 100;
-      clearInterval(interval);
-      progressBar.style.width = '100%';
-
-      setTimeout(() => {
-        // Trigger actual download
-        realLink.click();
-        closeModal();
-      }, 400);
-    }
-    progressBar.style.width = p + '%';
-  }, 100);
+  const iv = setInterval(() => {
+    p += Math.random() * 8 + 2;
+    if (p >= 100) { p = 100; clearInterval(iv); btn.innerHTML = '✓ Concluído!<span class="btn-shine"></span><span class="btn-glow"></span>'; }
+    pb.style.width = p + '%';
+  }, 120);
 }
 
-// Event listeners
-btnDownload.addEventListener('click', openModal);
-btnConfirm.addEventListener('click', triggerDownload);
-btnCancel.addEventListener('click', closeModal);
-modalClose.addEventListener('click', closeModal);
-
-// Click outside to close
-modalOverlay.addEventListener('click', (e) => {
-  if (e.target === modalOverlay) closeModal();
-});
-
-// ESC to close
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && modalOverlay.classList.contains('open')) {
-    closeModal();
-  }
-});
-
-// ─── SMOOTH NAV LINKS ────────────────────────────────────────────────────────
-document.querySelectorAll('a[href^="#"]').forEach(link => {
-  link.addEventListener('click', (e) => {
-    const target = document.querySelector(link.getAttribute('href'));
-    if (target) {
-      e.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+/* PARTICLES */
+const canvas = document.getElementById('particlesCanvas');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+function resize() {
+  W = canvas.width = canvas.offsetWidth;
+  H = canvas.height = canvas.offsetHeight;
+}
+resize(); window.addEventListener('resize', resize);
+const COLORS = ['rgba(128,14,19,0.5)','rgba(127,85,57,0.4)','rgba(196,154,108,0.35)','rgba(164,74,63,0.3)'];
+for (let i = 0; i < 60; i++) {
+  particles.push({
+    x: Math.random() * 1920, y: Math.random() * 1080,
+    vx: (Math.random() - 0.5) * 0.18, vy: -Math.random() * 0.25 - 0.05,
+    r: Math.random() * 1.8 + 0.4,
+    c: COLORS[Math.floor(Math.random() * COLORS.length)],
+    life: Math.random()
   });
+}
+function animParticles() {
+  ctx.clearRect(0, 0, W, H);
+  particles.forEach(p => {
+    p.x += p.vx; p.y += p.vy; p.life += 0.003;
+    if (p.y < -10 || p.life > 1) {
+      p.y = H + 10; p.x = Math.random() * W; p.life = 0;
+    }
+    const alpha = Math.sin(p.life * Math.PI);
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = p.c.replace(/[\d.]+\)$/, (alpha * 0.6) + ')');
+    ctx.fill();
+  });
+  requestAnimationFrame(animParticles);
+}
+animParticles();
+
+/* HAMBURGER */
+document.getElementById('hamburger').addEventListener('click', function() {
+  this.classList.toggle('open');
 });
