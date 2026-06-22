@@ -129,7 +129,161 @@ function animParticles() {
 }
 animParticles();
 
-/* HAMBURGER */
-document.getElementById('hamburger').addEventListener('click', function() {
+/* HAMBURGER / MOBILE NAV */
+const hamburgerBtn = document.getElementById('hamburger');
+const navLinksEl = document.querySelector('.nav-links');
+hamburgerBtn.addEventListener('click', function() {
   this.classList.toggle('open');
+  navLinksEl.classList.toggle('mobile-open');
 });
+navLinksEl.querySelectorAll('.nav-link').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburgerBtn.classList.remove('open');
+    navLinksEl.classList.remove('mobile-open');
+  });
+});
+
+/* ============================================================
+   AUTH SYSTEM
+   (login / cadastro / recuperação de senha / conta / logout)
+   Obs: isto é uma simulação 100% client-side (guardada no
+   localStorage) só para o dropdown funcionar de ponta a ponta.
+   Não está conectado a um backend real nem ao Firebase Auth —
+   o Firebase no HTML hoje só inicializa o Analytics. Se quiser
+   contas de verdade, é necessário ligar o Firebase Authentication.
+   ============================================================ */
+const AUTH_STORAGE_KEY = 'enchiridion_auth';
+const authNavWrapper = document.getElementById('authNavWrapper');
+const authLoginBtn = document.getElementById('authLoginBtn');
+const authUserBtn = document.getElementById('authUserBtn');
+
+function getAuthState() {
+  try { return JSON.parse(localStorage.getItem(AUTH_STORAGE_KEY)); }
+  catch (e) { return null; }
+}
+function setAuthState(state) {
+  localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(state));
+}
+function clearAuthState() {
+  localStorage.removeItem(AUTH_STORAGE_KEY);
+}
+
+function applyAuthUI(state) {
+  if (state && state.username) {
+    authLoginBtn.style.display = 'none';
+    authUserBtn.style.display = 'flex';
+    const letter = state.username.charAt(0).toUpperCase();
+    document.getElementById('authAvatarLetter').textContent = letter;
+    document.getElementById('authUsername').textContent = state.username;
+    document.getElementById('authTier').textContent = '◈ ' + (state.tier || 'STANDARD');
+    document.getElementById('accountLetter').textContent = letter;
+    document.getElementById('accountName').textContent = state.username;
+    document.getElementById('accountEmail').textContent = state.email || '';
+    document.getElementById('accountTierLabel').textContent = state.tier === 'STANDARD' ? 'PADRÃO' : (state.tier || 'PADRÃO');
+  } else {
+    authLoginBtn.style.display = 'flex';
+    authUserBtn.style.display = 'none';
+  }
+}
+applyAuthUI(getAuthState());
+
+function toggleAuthDropdown(event) {
+  event.stopPropagation();
+  if (authNavWrapper.classList.contains('open')) {
+    closeAuthDropdown();
+  } else {
+    authNavWrapper.classList.add('open');
+    const state = getAuthState();
+    showPanel(state && state.username ? 'panelAccount' : 'panelLogin');
+  }
+}
+function closeAuthDropdown() {
+  authNavWrapper.classList.remove('open');
+}
+document.addEventListener('click', e => {
+  if (authNavWrapper.classList.contains('open') && !authNavWrapper.contains(e.target)) {
+    closeAuthDropdown();
+  }
+});
+
+function showPanel(id) {
+  ['panelLogin', 'panelRegister', 'panelForgot', 'panelAccount'].forEach(pid => {
+    const el = document.getElementById(pid);
+    if (el) el.style.display = (pid === id) ? 'block' : 'none';
+  });
+  document.getElementById('authSuccess').style.display = 'none';
+}
+
+function shakeField(group) {
+  if (!group) return;
+  group.classList.remove('auth-shake');
+  void group.offsetWidth; // reinicia a animação
+  group.classList.add('auth-shake');
+}
+
+function togglePasswordVis() {
+  const input = document.getElementById('authPassword');
+  input.type = input.type === 'password' ? 'text' : 'password';
+}
+
+function finishAuth(state) {
+  setAuthState(state);
+  applyAuthUI(state);
+  showPanel('panelAccount');
+  const success = document.getElementById('authSuccess');
+  success.style.display = 'flex';
+  setTimeout(() => { success.style.display = 'none'; }, 1200);
+}
+
+function doLogin() {
+  const emailEl = document.getElementById('authEmail');
+  const passEl = document.getElementById('authPassword');
+  const email = emailEl.value.trim();
+  const password = passEl.value;
+  if (!email || !password) {
+    shakeField(emailEl.closest('.auth-field-group'));
+    return;
+  }
+  finishAuth({ username: email.split('@')[0], email, tier: 'STANDARD' });
+}
+
+function socialLogin(provider) {
+  const names = { google: 'Google', microsoft: 'Microsoft', discord: 'Discord', twitter: 'X' };
+  finishAuth({ username: 'Aventureiro_' + (names[provider] || provider), email: provider + '@conta.com', tier: 'STANDARD' });
+}
+
+function doRegister() {
+  const userEl = document.getElementById('registerUsername');
+  const emailEl = document.getElementById('registerEmail');
+  const passEl = document.getElementById('registerPassword');
+  const username = userEl.value.trim();
+  const email = emailEl.value.trim();
+  const password = passEl.value;
+  if (!username || !email || !password) {
+    shakeField((!username ? userEl : !email ? emailEl : passEl).closest('.auth-field-group'));
+    return;
+  }
+  finishAuth({ username, email, tier: 'STANDARD' });
+}
+
+function doForgot() {
+  const input = document.getElementById('forgotEmail');
+  const email = input.value.trim();
+  if (!email) {
+    shakeField(input.closest('.auth-field-group'));
+    return;
+  }
+  const sub = document.querySelector('#panelForgot .auth-panel-sub');
+  sub.textContent = 'Link enviado para ' + email;
+  input.disabled = true;
+  document.querySelector('#panelForgot .auth-submit-btn').disabled = true;
+}
+
+function doLogout() {
+  clearAuthState();
+  applyAuthUI(null);
+  closeAuthDropdown();
+  showPanel('panelLogin');
+  document.getElementById('authEmail').value = '';
+  document.getElementById('authPassword').value = '';
+}
